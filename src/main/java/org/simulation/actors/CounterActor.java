@@ -26,9 +26,8 @@ public class CounterActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().matchEquals("inc", s -> {
-            inc();
-        }).matchEquals("stop", s -> getContext().stop(self())).build();
+        return receiveBuilder().matchEquals("inc", s -> inc())
+                .matchEquals("stop", s -> getContext().stop(self())).build();
 
     }
 }

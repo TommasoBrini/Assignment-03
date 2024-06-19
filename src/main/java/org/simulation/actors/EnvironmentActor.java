@@ -29,9 +29,7 @@ public class EnvironmentActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().matchEquals("step", s -> {
-            doStep();
-        }).build();
+        return receiveBuilder().matchEquals("step", s -> doStep()).build();
     }
 
 }

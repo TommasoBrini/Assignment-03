@@ -20,8 +20,7 @@ public class CarActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().matchEquals("step", s -> {
-            step();
-        }).matchEquals("stop", s -> getContext().stop(self())).build();
+        return receiveBuilder().matchEquals("step", s -> step())
+                .matchEquals("stop", s -> getContext().stop(self())).build();
     }
 }
