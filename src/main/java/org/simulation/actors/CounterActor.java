@@ -28,7 +28,7 @@ public class CounterActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder().matchEquals("inc", s -> {
             inc();
-        }).build();
+        }).matchEquals("stop", s -> getContext().system().stop(self())).build();
 
     }
 }
