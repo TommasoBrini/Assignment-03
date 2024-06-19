@@ -1,4 +1,4 @@
-package org.example.actors;
+package org.simulation.actors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
