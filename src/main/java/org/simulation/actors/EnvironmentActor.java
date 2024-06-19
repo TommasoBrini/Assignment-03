@@ -19,8 +19,7 @@ public class EnvironmentActor extends AbstractActor {
 
     private void doStep() {
         if (this.actualNumStep == this.maxNumStep + 1) {
-            getContext().actorSelection("/user/env/*").tell("stop", ActorRef.noSender());
-            getContext().actorSelection("/user/counter").tell("stop", ActorRef.noSender());
+            getContext().actorSelection("/user/*").tell("stop", ActorRef.noSender());
             getContext().system().terminate();
             return;
         }

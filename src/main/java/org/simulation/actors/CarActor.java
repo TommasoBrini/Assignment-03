@@ -22,6 +22,6 @@ public class CarActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder().matchEquals("step", s -> {
             step();
-        }).matchEquals("stop", s -> getContext().system().stop(self())).build();
+        }).matchEquals("stop", s -> getContext().stop(self())).build();
     }
 }
