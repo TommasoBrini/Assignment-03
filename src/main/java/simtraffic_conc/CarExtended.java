@@ -40,12 +40,12 @@ public class CarExtended extends AbstractCar {
 	@Override
 	public void decide(int dt) {
 		switch (state) {
-		case CarAgentState.STOPPED:
+		case STOPPED:
 			if (!detectedNearCar()) {
 				state = CarAgentState.ACCELERATING;
 			}
 			break;
-		case CarAgentState.ACCELERATING:
+		case ACCELERATING:
 			if (detectedNearCar()) {
 				state = CarAgentState.DECELERATING_BECAUSE_OF_A_CAR;
 			} else if (detectedRedOrOrgangeSemNear()) {
@@ -57,14 +57,14 @@ public class CarExtended extends AbstractCar {
 				}			
 			}
 			break;
-		case CarAgentState.MOVING_CONSTANT_SPEED:
+		case MOVING_CONSTANT_SPEED:
 			if (detectedNearCar()) {
 				state = CarAgentState.DECELERATING_BECAUSE_OF_A_CAR;
 			} else if (detectedRedOrOrgangeSemNear()) {
 				state = CarAgentState.DECELERATING_BECAUSE_OF_A_NOT_GREEN_SEM;
 			}
 			break;
-		case CarAgentState.DECELERATING_BECAUSE_OF_A_CAR:
+		case DECELERATING_BECAUSE_OF_A_CAR:
 			this.currentSpeed -= deceleration * dt;
 			if (this.currentSpeed <= 0) {
 				state =  CarAgentState.STOPPED;
@@ -73,7 +73,7 @@ public class CarExtended extends AbstractCar {
 				waitingTime = 0;
 			}
 			break;
-		case CarAgentState.DECELERATING_BECAUSE_OF_A_NOT_GREEN_SEM:
+		case DECELERATING_BECAUSE_OF_A_NOT_GREEN_SEM:
 			this.currentSpeed -= deceleration * dt;
 			if (this.currentSpeed <= 0) {
 				state =  CarAgentState.WAITING_FOR_GREEN_SEM;
@@ -81,13 +81,13 @@ public class CarExtended extends AbstractCar {
 				state = CarAgentState.ACCELERATING;
 			}
 			break;
-		case CarAgentState.WAIT_A_BIT:
+		case WAIT_A_BIT:
 			waitingTime += dt;
 			if (waitingTime > MAX_WAITING_TIME) {
 				state = CarAgentState.ACCELERATING;
 			}
 			break;
-		case CarAgentState.WAITING_FOR_GREEN_SEM:
+		case WAITING_FOR_GREEN_SEM:
 			if (detectedGreenSem()) {
 				state = CarAgentState.ACCELERATING;
 			}
