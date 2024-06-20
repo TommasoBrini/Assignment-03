@@ -5,7 +5,6 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
 
 public class CarActor extends AbstractActor {
-
     private final ActorSelection target;
 
     public CarActor() {
