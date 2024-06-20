@@ -20,7 +20,7 @@ public class CounterActor extends AbstractActor {
             System.out.println("All cars have finished their steps");
             System.out.println("Count: " + count);
             this.count = 0;
-            this.target.tell("step", getSelf());
+            this.target.tell(new Message<String>("step", ""), getSelf());
         }
     }
 
