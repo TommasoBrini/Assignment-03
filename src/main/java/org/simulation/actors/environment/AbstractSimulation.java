@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractSimulation {
-    //TODO: env & agents ???
     private ActorSystem system;
     /* simulation listeners */
     private List<SimulationListener> listeners;
@@ -30,14 +29,14 @@ public abstract class AbstractSimulation {
     private long startWallTime;
     private long endWallTime;
     private long averageTimePerStep;
+    private int numCar;
 
-    protected AbstractSimulation() {
+    protected AbstractSimulation(int numCar) {
         system = ActorSystem.create("TrafficSimulation");
-        //agents = new ArrayList<>();
         system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
         System.out.println("creato env");
-        int numCar = 4;
-        for(int i = 0; i < numCar; i++) {
+        this.numCar = numCar;
+        for(int i = 0; i < this.numCar; i++) {
             system.actorOf(Props.create(CarAgentActor.class, "car-" + i, 0.1, 0.2, 0.3), "car-" + i);
             System.out.println("creato car-" + i);
         }
@@ -65,7 +64,7 @@ public abstract class AbstractSimulation {
         /* initialize the env and the agents inside */
         int t = t0;
 
-        system.actorSelection("/user/env").tell(new Message<>("init", null), ActorRef.noSender());
+        system.actorSelection("/user/env").tell(new Message<>("init", numSteps, numCar), ActorRef.noSender());
         for (int i = 0; i < 4; i++) {
             system.actorSelection("/user/car-" + i).tell(new Message<>("init", null), ActorRef.noSender());
         }
@@ -73,40 +72,29 @@ public abstract class AbstractSimulation {
         this.notifyReset(t);
 
         long timePerStep = 0;
-        int nSteps = 0;
 
-        while (nSteps < numSteps) {
+        currentWallTime = System.currentTimeMillis();
 
-            currentWallTime = System.currentTimeMillis();
+        System.out.println("Step: " + t);
+        /* make a step */
+        system.actorSelection("/user/env").tell(new Message<>("step", dt), ActorRef.noSender());
 
-            System.out.println("Step: " + t);
-            /* make a step */
+        //TODO: stats for the simulation
+        /*
+        t += dt;
 
-            system.actorSelection("/user/env").tell(new Message<>("step", dt), ActorRef.noSender());
+        /* process actions submitted to the environment
 
-            /* clean the submitted actions */
-            system.actorSelection("/user/env").tell(new Message<>("clear-actions", null), ActorRef.noSender());
+        system.actorSelection("/user/env").tell(new Message<>("process-actions", null), ActorRef.noSender());
 
-            /* ask each agent to make a step */
+        notifyNewStep(t);
 
-            for(int i = 0; i < 4; i++) {
-                system.actorSelection("/user/car-" + i).tell(new Message<>("step", dt), ActorRef.noSender());
-            }
-            t += dt;
+        nSteps++;
+        timePerStep += System.currentTimeMillis() - currentWallTime;
 
-            /* process actions submitted to the environment */
-
-            system.actorSelection("/user/env").tell(new Message<>("process-actions", null), ActorRef.noSender());
-
-            notifyNewStep(t);
-
-            nSteps++;
-            timePerStep += System.currentTimeMillis() - currentWallTime;
-
-            if (toBeInSyncWithWallTime) {
-                syncWithWallTime();
-            }
-        }
+        if (toBeInSyncWithWallTime) {
+            syncWithWallTime();
+        }*/
 
         endWallTime = System.currentTimeMillis();
         this.averageTimePerStep = timePerStep / numSteps;

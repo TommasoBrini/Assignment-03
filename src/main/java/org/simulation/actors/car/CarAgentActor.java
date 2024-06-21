@@ -2,6 +2,7 @@ package org.simulation.actors.car;
 
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import org.simulation.actors.Message;
 import org.simulation.seq.car.CarAgentInfo;
@@ -10,10 +11,10 @@ import org.simulation.seq.util.CarPercept;
 import org.simulation.seq.util.MoveForward;
 import org.simulation.seq.util.TrafficLightInfo;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class CarAgentActor extends AbstractActor {
-    private final ActorSelection target;
     private String myId;
 
     protected double maxSpeed;
@@ -42,7 +43,6 @@ public class CarAgentActor extends AbstractActor {
     public CarAgentActor(String id, double acc, double dec, double vmax) {
         super();
         this.myId = id;
-        this.target = getContext().actorSelection("/user/counter");
         this.acceleration = acc;
         this.deceleration = dec;
         this.maxSpeed = vmax;
@@ -55,18 +55,22 @@ public class CarAgentActor extends AbstractActor {
         /*
         TODO: ask to env the percepts
          */
+        getContext().actorSelection("/user/env").tell(new Message<>("get-current-percepts", getId()), ActorRef.noSender());
         //currentPercept = (CarPercept) env.getCurrentPercepts(getId());
+    }
 
+    private void decideAndAct(int dt){
+        System.out.println("Decide and act for car " + getId() + "...");
         /* decide */
         selectedAction = Optional.empty();
 
         decide(dt);
 
-        /* act */
+        /* act TODO: vero act*/
         if (selectedAction.isPresent()) {
-            // TODO: submit the action to the environment
-            //env.submitAction(selectedAction.get());
+            getContext().actorSelection("/user/env").tell(new Message<>("submit-action", selectedAction.get()), ActorRef.noSender());
         }
+        //getContext().actorSelection("/user/env").tell(new Message<>("submit-action", selectedAction.get()), ActorRef.noSender());
     }
 
     private void decide(int dt){
@@ -127,6 +131,8 @@ public class CarAgentActor extends AbstractActor {
 
         if (currentSpeed > 0) {
             selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));
+        } else {
+            selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * 0));
         }
     }
 
@@ -177,6 +183,11 @@ public class CarAgentActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.content()))
+                .match(Message.class, message -> "percepts".equals(message.name()), message -> {
+                    //TODO: update percepts
+                    this.currentPercept = new CarPercept(0.1, Optional.empty(), Optional.empty());
+                    this.decideAndAct((Integer) message.content());
+                })
                 .match(Message.class, message -> "stop".equals(message.name()), s -> getContext().stop(self()))
                 .build();
     }

@@ -15,6 +15,6 @@ public class Main {
         final ActorSystem system = ActorSystem.create("TrafficSimulation");
         system.actorOf(Props.create(CounterActor.class, numCar), "counter");
         system.actorOf(Props.create(EnvironmentActor.class, numCar, numStep), "env");
-        system.actorSelection("/user/env").tell(new Message<Integer>("step", 0), ActorRef.noSender());
+        //system.actorSelection("/user/env").tell(new Message<Integer>("step", 0), ActorRef.noSender());
     }
 }

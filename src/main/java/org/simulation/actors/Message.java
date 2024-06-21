@@ -1,3 +1,13 @@
 package org.simulation.actors;
 
-public record Message<T>(String name, T content) { }
+import java.util.Optional;
+
+public record Message<T, X>(String name, T content, Optional<X> content2) {
+    public Message(String name, T content) {
+        this(name, content, Optional.empty());
+    }
+
+    public Message(String name, T content, X content2) {
+        this(name, content, Optional.ofNullable(content2));
+    }
+}
