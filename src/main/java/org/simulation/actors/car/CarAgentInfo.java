@@ -1,6 +1,5 @@
 package org.simulation.actors.car;
 
-import org.simulation.seq.car.CarAgent;
 import org.simulation.actors.environment.Road;
 
 public  class CarAgentInfo {

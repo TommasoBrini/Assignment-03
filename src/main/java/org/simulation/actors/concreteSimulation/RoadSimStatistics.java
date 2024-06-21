@@ -1,11 +1,6 @@
 package org.simulation.actors.concreteSimulation;
 
-import org.simulation.actors.car.AbstractAgentActor;
-import org.simulation.actors.car.CarAgentActor;
-import org.simulation.actors.environment.AbstractEnvironmentActor;
 import org.simulation.actors.environment.SimulationListener;
-
-import java.util.List;
 
 /**
  * Simple class keeping track of some statistics about a traffic simulation

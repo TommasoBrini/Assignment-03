@@ -1,6 +1,5 @@
 package org.simulation.actors.concreteSimulation;
 
-import org.simulation.actors.car.AbstractAgentActor;
 import org.simulation.actors.car.CarAgentInfo;
 import org.simulation.actors.environment.*;
 import org.simulation.actors.util.V2d;
