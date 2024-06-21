@@ -1,7 +1,9 @@
 package org.simulation.actors.environment;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import org.simulation.actors.Message;
 import org.simulation.actors.car.CarAgentActor;
 
 import java.util.ArrayList;
@@ -32,11 +34,11 @@ public abstract class AbstractSimulation {
     protected AbstractSimulation() {
         system = ActorSystem.create("TrafficSimulation");
         //agents = new ArrayList<>();
-        system.actorOf(Props.create(EnvironmentActor.class), "env");
+        system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
         System.out.println("creato env");
         int numCar = 4;
         for(int i = 0; i < numCar; i++) {
-            system.actorOf(Props.create(CarAgentActor.class), "car-" + i);
+            system.actorOf(Props.create(CarAgentActor.class, "car-" + i, 0.1, 0.2, 0.3), "car-" + i);
             System.out.println("creato car-" + i);
         }
         listeners = new ArrayList<>();
@@ -63,9 +65,9 @@ public abstract class AbstractSimulation {
         /* initialize the env and the agents inside */
         int t = t0;
 
-        system.actorSelection("env").tell("init", null);
+        system.actorSelection("/user/env").tell(new Message<>("init", null), ActorRef.noSender());
         for (int i = 0; i < 4; i++) {
-            system.actorSelection("car-" + i).tell("init", null);
+            system.actorSelection("/user/car-" + i).tell(new Message<>("init", null), ActorRef.noSender());
         }
 
         this.notifyReset(t);
@@ -77,23 +79,24 @@ public abstract class AbstractSimulation {
 
             currentWallTime = System.currentTimeMillis();
 
+            System.out.println("Step: " + t);
             /* make a step */
 
-            system.actorSelection("env").tell("step", null);
+            system.actorSelection("/user/env").tell(new Message<>("step", dt), ActorRef.noSender());
 
             /* clean the submitted actions */
-            system.actorSelection("env").tell("cleanActions", null);
+            system.actorSelection("/user/env").tell(new Message<>("clear-actions", null), ActorRef.noSender());
 
             /* ask each agent to make a step */
 
             for(int i = 0; i < 4; i++) {
-                system.actorSelection("car-" + i).tell("step", null);
+                system.actorSelection("/user/car-" + i).tell(new Message<>("step", dt), ActorRef.noSender());
             }
             t += dt;
 
             /* process actions submitted to the environment */
 
-            system.actorSelection("env").tell("processActions", null);
+            system.actorSelection("/user/env").tell(new Message<>("process-actions", null), ActorRef.noSender());
 
             notifyNewStep(t);
 

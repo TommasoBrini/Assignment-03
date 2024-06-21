@@ -50,7 +50,7 @@ public class CarAgentActor extends AbstractActor {
     }
 
     private void step(int dt) {
-        System.out.println("Step " + dt + " for car " + getId() + "...");
+        System.out.println("Step for car " + getId() + "...");
         /* sense */
         /*
         TODO: ask to env the percepts
