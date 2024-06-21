@@ -32,7 +32,7 @@ public abstract class AbstractSimulation {
     protected AbstractSimulation() {
         system = ActorSystem.create("TrafficSimulation");
         //agents = new ArrayList<>();
-        system.actorOf(Props.create(AbstractEnvironmentActor.class), "env");
+        system.actorOf(Props.create(EnvironmentActor.class), "env");
         System.out.println("creato env");
         int numCar = 4;
         for(int i = 0; i < numCar; i++) {
