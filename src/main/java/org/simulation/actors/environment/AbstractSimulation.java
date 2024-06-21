@@ -2,11 +2,7 @@ package org.simulation.actors.environment;
 
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import org.simulation.actors.EnvironmentActor;
-import org.simulation.actors.car.AbstractAgentActor;
-import org.simulation.actors.environment.SimulationListener;
-import org.simulation.seq.car.AbstractAgent;
-import org.simulation.seq.environment.AbstractEnvironment;
+import org.simulation.actors.car.CarAgentActor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +36,7 @@ public abstract class AbstractSimulation {
         System.out.println("creato env");
         int numCar = 4;
         for(int i = 0; i < numCar; i++) {
-            system.actorOf(Props.create(AbstractAgentActor.class), "car-" + i);
+            system.actorOf(Props.create(CarAgentActor.class), "car-" + i);
             System.out.println("creato car-" + i);
         }
         listeners = new ArrayList<>();

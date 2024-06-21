@@ -1,7 +1,7 @@
 package org.simulation.actors;
 
 import akka.actor.*;
-import org.simulation.actors.car.AbstractAgentActor;
+import org.simulation.actors.car.CarAgentActor;
 
 public class EnvironmentActor extends AbstractActor {
     private int actualNumStep;
@@ -12,7 +12,7 @@ public class EnvironmentActor extends AbstractActor {
         this.actualNumStep = 1;
         this.maxNumStep = maxNumStep;
         for(int i = 0; i < numCar; i++) {
-            getContext().actorOf(Props.create(AbstractAgentActor.class), "car-" + i);
+            getContext().actorOf(Props.create(CarAgentActor.class), "car-" + i);
         }
     }
 
