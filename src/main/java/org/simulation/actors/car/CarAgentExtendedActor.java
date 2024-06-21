@@ -31,7 +31,7 @@ public class CarAgentExtendedActor extends CarAgentActor{
     }
 
     @Override
-    public void decide(int dt) {
+    protected void decide(int dt) {
         switch (state) {
             case STOPPED:
                 if (!detectedNearCar()) {

@@ -24,7 +24,8 @@ public abstract class CarAgentActor extends AbstractAgentActor{
         // TODO: register the car in the environment
     }
 
-    public void step(int dt) {
+    protected void step(int dt) {
+        System.out.println("Step " + dt + " for car " + getId() + "...");
         /* sense */
         /*
         TODO: ask to env the percepts
@@ -45,7 +46,7 @@ public abstract class CarAgentActor extends AbstractAgentActor{
 
     protected abstract void decide(int dt);
 
-    public double getCurrentSpeed() {
+    protected double getCurrentSpeed() {
         return currentSpeed;
     }
 
