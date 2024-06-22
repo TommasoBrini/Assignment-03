@@ -3,9 +3,8 @@ package org.simulation.actors.environment;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import org.simulation.actors.Message;
+import org.simulation.actors.util.Message;
 import org.simulation.actors.car.CarAgentActor;
-import org.simulation.seq.util.P2d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +29,13 @@ public abstract class AbstractSimulation {
     private long startWallTime;
     private long endWallTime;
     private long averageTimePerStep;
-    private int numCar;
+    protected int numCar;
 
     protected AbstractSimulation(int numCar){
         system = ActorSystem.create("TrafficSimulation");
         system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
         System.out.println("creato env");
         this.numCar = numCar;
-        for(int i = 0; i < this.numCar; i++) {
-            system.actorOf(Props.create(CarAgentActor.class, "car-" + i, 0.1, 0.2, 0.3), "car-" + i);
-            System.out.println("creato car-" + i);
-        }
         listeners = new ArrayList<>();
         toBeInSyncWithWallTime = false;
     }

@@ -2,6 +2,7 @@ package org.simulation.actors;
 
 import akka.actor.*;
 import org.simulation.actors.car.CarAgentActor;
+import org.simulation.actors.util.Message;
 
 public class EnvironmentActor extends AbstractActor {
     private int actualNumStep;

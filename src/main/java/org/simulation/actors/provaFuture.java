@@ -5,6 +5,7 @@ import akka.actor.Props;
 import akka.pattern.Patterns;
 import org.simulation.actors.car.CarAgentActor;
 import org.simulation.actors.environment.Road;
+import org.simulation.actors.util.Message;
 import org.simulation.actors.util.P2d;
 import scala.concurrent.Await;
 import scala.concurrent.Future;

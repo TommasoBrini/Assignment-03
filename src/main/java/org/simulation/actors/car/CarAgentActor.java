@@ -3,12 +3,9 @@ package org.simulation.actors.car;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
-import akka.actor.Props;
 import akka.pattern.Patterns;
-import org.simulation.actors.Message;
+import org.simulation.actors.util.Message;
 import org.simulation.actors.environment.Road;
-import org.simulation.actors.util.P2d;
 import org.simulation.seq.car.CarAgentInfo;
 import org.simulation.seq.util.Action;
 import org.simulation.seq.util.CarPercept;
@@ -19,7 +16,6 @@ import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -60,7 +56,7 @@ public class CarAgentActor extends AbstractActor {
         this.acceleration = acc;
         this.deceleration = dec;
         this.maxSpeed = vmax;
-        getContext().actorSelection("/user/env").tell(new Message<>("register-car", List.of(id, road, initialPos)), ActorRef.noSender());
+        getContext().actorSelection("/user/env").tell(new Message<>("register-car", List.of(id, this, road, initialPos)), ActorRef.noSender());
         state = CarAgentState.STOPPED;
     }
 
@@ -151,6 +147,8 @@ public class CarAgentActor extends AbstractActor {
 
         if (currentSpeed > 0) {
             selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));
+        } else {
+            selectedAction = Optional.of(new MoveForward(getId(), 0));
         }
     }
 
