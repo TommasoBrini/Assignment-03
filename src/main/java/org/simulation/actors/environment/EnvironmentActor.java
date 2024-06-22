@@ -101,7 +101,6 @@ public class EnvironmentActor extends AbstractActor {
         Optional<CarAgentInfo> nearestCar = getNearestCarInFront(road,pos, CAR_DETECTION_RANGE);
         Optional<TrafficLightInfo> nearestSem = getNearestSemaphoreInFront(road,pos, SEM_DETECTION_RANGE);
         */
-        System.out.println("ENV GET CURRENT PERCEPTS to" + agentId + "...");
         getContext().actorSelection("/user/" + agentId).tell(new Message<>("percepts", dt, new CarPercept(1.0, Optional.empty(), Optional.empty())), ActorRef.noSender());
     }
 
@@ -135,9 +134,7 @@ public class EnvironmentActor extends AbstractActor {
      */
     private void submitAction(Action act) {
         submittedActions.add(act);
-        System.out.println("ENV SUBMIT ACTION");
         count++;
-        System.out.println(count);
         if (count == nCars) {
             count = 0;
             getSelf().tell(new Message<>("process-actions", null), ActorRef.noSender());

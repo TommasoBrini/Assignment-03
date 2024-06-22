@@ -11,7 +11,7 @@ public class RunTrafficSimulation {
 
 	public static void main(String[] args) {		
 
-		var simulation = new TrafficSimulationSingleRoadTwoCars(2);
+		var simulation = new TrafficSimulationSingleRoadTwoCars(5);
 		simulation.setup();
 		
 		//RoadSimStatistics stat = new RoadSimStatistics();

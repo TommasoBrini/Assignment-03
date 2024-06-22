@@ -60,7 +60,6 @@ public class CarAgentActor extends AbstractActor {
     }
 
     private void decideAndAct(int dt){
-        System.out.println("Decide and act for car " + getId() + "...");
         /* decide */
         selectedAction = Optional.empty();
 
