@@ -10,7 +10,6 @@ import org.simulation.actors.environment.SimulationListener;
  */
 public class RoadSimStatistics implements SimulationListener {
 
-	
 	private double averageSpeed;
 	private double minSpeed;
 	private double maxSpeed;

@@ -29,7 +29,7 @@ public class EnvironmentActor extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.content()))
+                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(1)))
                 .match(Message.class, message -> "prova".equals(message.name()), message -> doProva())
                 .build();
     }

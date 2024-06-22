@@ -71,13 +71,12 @@ public class EnvironmentActor extends AbstractActor {
         getSelf().tell(new Message<>("clear-actions", null), ActorRef.noSender());
 
         /* ask each agent to make a step */
-        getContext().actorSelection("/user/car-*").tell(new Message<>("step", dt), ActorRef.noSender());
+        getContext().actorSelection("/user/car-*").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
     }
 
-    private Road createRoad(P2d p0, P2d p1) {
+    private void createRoad(P2d p0, P2d p1) {
         Road r = new Road(p0, p1);
         this.roads.add(r);
-        return r;
     }
 
     private TrafficLight createTrafficLight(P2d pos, TrafficLight.TrafficLightState initialState, int greenDuration, int yellowDuration, int redDuration) {
@@ -101,7 +100,7 @@ public class EnvironmentActor extends AbstractActor {
         Optional<CarAgentInfo> nearestCar = getNearestCarInFront(road,pos, CAR_DETECTION_RANGE);
         Optional<TrafficLightInfo> nearestSem = getNearestSemaphoreInFront(road,pos, SEM_DETECTION_RANGE);
         */
-        getContext().actorSelection("/user/" + agentId).tell(new Message<>("percepts", dt, new CarPercept(1.0, Optional.empty(), Optional.empty())), ActorRef.noSender());
+        getContext().actorSelection("/user/" + agentId).tell(new Message<>("percepts", List.of(dt, new CarPercept(1.0, Optional.empty(), Optional.empty()))), ActorRef.noSender());
     }
 
     private Optional<CarAgentInfo> getNearestCarInFront(Road road, double carPos, double range){
@@ -181,7 +180,7 @@ public class EnvironmentActor extends AbstractActor {
         }*/
         System.out.println("Pronto per prox step");
 
-        getSelf().tell(new Message<>("step", dt), ActorRef.noSender());
+        getSelf().tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
     }
 
     private List<CarAgentInfo> getAgentInfo(){
@@ -200,9 +199,9 @@ public class EnvironmentActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(Message.class, message -> "get-id".equals(message.name()), message -> getSelf().tell(id, getSelf()))
-                .match(Message.class, message -> "init".equals(message.name()), message -> init((Integer) message.content(), (Integer) message.content2().get()))
-                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.content()))
-                .match(Message.class, message -> "get-current-percepts".equals(message.name()), message -> getCurrentPercepts((String) message.content()))
+                .match(Message.class, message -> "init".equals(message.name()), message -> init((Integer) message.contents().get(1), (Integer) message.contents().get(2)))
+                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(1)))
+                .match(Message.class, message -> "get-current-percepts".equals(message.name()), message -> getCurrentPercepts((String) message.contents().get(1)))
                 .match(Message.class, message -> "submit-action".equals(message.name()), message -> {
                     // TODO: non so perchè non va bene
                     // this.submitAction((MoveForward) message.content());
@@ -210,6 +209,7 @@ public class EnvironmentActor extends AbstractActor {
                 })
                 .match(Message.class, message -> "clean-actions".equals(message.name()), message -> cleanActions())
                 .match(Message.class, message -> "process-actions".equals(message.name()), message -> processActions())
+                .match(Message.class, message -> "create-roads".equals(message.name()), message -> createRoad((P2d) message.contents().get(1), (P2d) message.contents().get(2)))
                 .build();
     }
 

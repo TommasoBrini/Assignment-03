@@ -1,5 +1,7 @@
 package org.simulation.actors.run;
 
+import org.simulation.actors.concreteSimulation.RoadSimStatistics;
+import org.simulation.actors.concreteSimulation.RoadSimView;
 import org.simulation.actors.concreteSimulation.TrafficSimulationSingleRoadTwoCars;
 
 /**
@@ -13,13 +15,13 @@ public class RunTrafficSimulation {
 
 		var simulation = new TrafficSimulationSingleRoadTwoCars(5);
 		simulation.setup();
-		
-		//RoadSimStatistics stat = new RoadSimStatistics();
-		//RoadSimView view = new RoadSimView();
-		//view.display();
-		
-		//simulation.addSimulationListener(stat);
-		//simulation.addSimulationListener(view);
+	/*
+		RoadSimStatistics stat = new RoadSimStatistics();
+		RoadSimView view = new RoadSimView();
+		view.display();
+
+		simulation.addSimulationListener(stat);
+		simulation.addSimulationListener(view);*/
 		simulation.run(10);
 	}
 }

@@ -1,9 +1,6 @@
 package org.simulation.seq.run;
 
-import org.simulation.seq.concreteSimulation.TrafficSimulationSingleRoadTwoCars;
-import org.simulation.seq.concreteSimulation.TrafficSimulationSingleRoadWithTrafficLightTwoCars;
-import org.simulation.seq.concreteSimulation.RoadSimStatistics;
-import org.simulation.seq.concreteSimulation.RoadSimView;
+import org.simulation.seq.concreteSimulation.*;
 
 /**
  * 
@@ -14,10 +11,10 @@ public class RunTrafficSimulation {
 
 	public static void main(String[] args) {		
 
-		var simulation = new TrafficSimulationSingleRoadTwoCars();
-		// var simulation = new TrafficSimulationSingleRoadSeveralCars();
+		//var simulation = new TrafficSimulationSingleRoadTwoCars();
+		//var simulation = new TrafficSimulationSingleRoadSeveralCars();
 		// var simulation = new TrafficSimulationSingleRoadWithTrafficLightTwoCars();
-		//var simulation = new TrafficSimulationWithCrossRoads();
+		var simulation = new TrafficSimulationWithCrossRoads();
 		simulation.setup();
 		
 		RoadSimStatistics stat = new RoadSimStatistics();

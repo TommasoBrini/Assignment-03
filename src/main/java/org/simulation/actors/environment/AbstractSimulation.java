@@ -5,12 +5,13 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import org.simulation.actors.Message;
 import org.simulation.actors.car.CarAgentActor;
+import org.simulation.seq.util.P2d;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractSimulation {
-    private ActorSystem system;
+    protected ActorSystem system;
     /* simulation listeners */
     private List<SimulationListener> listeners;
 
@@ -31,7 +32,7 @@ public abstract class AbstractSimulation {
     private long averageTimePerStep;
     private int numCar;
 
-    protected AbstractSimulation(int numCar) {
+    protected AbstractSimulation(int numCar){
         system = ActorSystem.create("TrafficSimulation");
         system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
         System.out.println("creato env");
@@ -64,7 +65,7 @@ public abstract class AbstractSimulation {
         /* initialize the env and the agents inside */
         int t = t0;
 
-        system.actorSelection("/user/env").tell(new Message<>("init", numSteps, numCar), ActorRef.noSender());
+        system.actorSelection("/user/env").tell(new Message<>("init", List.of(numSteps, numCar)), ActorRef.noSender());
         for (int i = 0; i < 4; i++) {
             system.actorSelection("/user/car-" + i).tell(new Message<>("init", null), ActorRef.noSender());
         }
@@ -77,7 +78,7 @@ public abstract class AbstractSimulation {
 
         System.out.println("Step: " + t);
         /* make a step */
-        system.actorSelection("/user/env").tell(new Message<>("step", dt), ActorRef.noSender());
+        system.actorSelection("/user/env").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
 
         //TODO: stats for the simulation
         /*

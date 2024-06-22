@@ -4,27 +4,41 @@ package org.simulation.actors.car;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
+import akka.actor.Props;
+import akka.pattern.Patterns;
 import org.simulation.actors.Message;
+import org.simulation.actors.environment.Road;
+import org.simulation.actors.util.P2d;
 import org.simulation.seq.car.CarAgentInfo;
 import org.simulation.seq.util.Action;
 import org.simulation.seq.util.CarPercept;
 import org.simulation.seq.util.MoveForward;
 import org.simulation.seq.util.TrafficLightInfo;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class CarAgentActor extends AbstractActor {
-    private String myId;
 
+    /* abstract agent */
+    private String myId;
+    //TODO: private Environment env; // non dovrebbe servire perchè l'env è unico => attore
+
+    /* Car Agent */
     protected double maxSpeed;
     protected double currentSpeed;
     protected double acceleration;
     protected double deceleration;
-    /* percept and action retrieved and submitted at each step */
     protected CarPercept currentPercept;
     protected Optional<Action> selectedAction;
 
+    /* CAREXTENDED */
     private static final int CAR_NEAR_DIST = 15;
     private static final int CAR_FAR_ENOUGH_DIST = 20;
     private static final int MAX_WAITING_TIME = 2;
@@ -40,36 +54,43 @@ public class CarAgentActor extends AbstractActor {
 
     private int waitingTime;
 
-    public CarAgentActor(String id, double acc, double dec, double vmax) {
+    public CarAgentActor(String id, Road road, double initialPos, double acc, double dec, double vmax) {
         super();
         this.myId = id;
         this.acceleration = acc;
         this.deceleration = dec;
         this.maxSpeed = vmax;
+        getContext().actorSelection("/user/env").tell(new Message<>("register-car", List.of(id, road, initialPos)), ActorRef.noSender());
         state = CarAgentState.STOPPED;
+    }
+
+    private String getId() {
+        return myId;
     }
 
     private void step(int dt) {
         System.out.println("Step for car " + getId() + "...");
-        /* sense */
-        /*
-        TODO: ask to env the percepts
-         */
-        getContext().actorSelection("/user/env").tell(new Message<>("get-current-percepts", getId()), ActorRef.noSender());
-        //currentPercept = (CarPercept) env.getCurrentPercepts(getId());
-    }
 
-    private void decideAndAct(int dt){
+        Future<Object> future = Patterns.ask(getContext().actorSelection("/user/env"), new Message<>("get-current-percepts", List.of(getId())), 1000);
+        try {
+            currentPercept = (CarPercept) Await.result(future, Duration.create(5, TimeUnit.SECONDS));
+        } catch (TimeoutException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         /* decide */
         selectedAction = Optional.empty();
 
         decide(dt);
 
-        /* act TODO: vero act*/
+        /* act */
         if (selectedAction.isPresent()) {
-            getContext().actorSelection("/user/env").tell(new Message<>("submit-action", selectedAction.get()), ActorRef.noSender());
+            getContext().actorSelection("/user/env").tell(new Message<>("submit-action", List.of(selectedAction.get())), ActorRef.noSender());
         }
-        //getContext().actorSelection("/user/env").tell(new Message<>("submit-action", selectedAction.get()), ActorRef.noSender());
+    }
+
+    private double getCurrentSpeed() {
+        return currentSpeed;
     }
 
     private void decide(int dt){
@@ -130,8 +151,6 @@ public class CarAgentActor extends AbstractActor {
 
         if (currentSpeed > 0) {
             selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));
-        } else {
-            selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * 0));
         }
     }
 
@@ -170,23 +189,12 @@ public class CarAgentActor extends AbstractActor {
         }
     }
 
-    private String getId() {
-        return myId;
-    }
-
-    private double getCurrentSpeed() {
-        return currentSpeed;
-    }
-
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.content()))
-                .match(Message.class, message -> "percepts".equals(message.name()), message -> {
-                    //TODO: update percepts
-                    this.currentPercept = new CarPercept(0.1, Optional.empty(), Optional.empty());
-                    this.decideAndAct((Integer) message.content());
-                })
+                .match(Message.class, message -> "get-id".equals(message.name()), message -> getSender().tell(getId(), getSelf()))
+                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(1)))
+                .match(Message.class, message -> "get-current-speed".equals(message.name()), message -> getSender().tell(getCurrentSpeed(), getSelf()))
                 .match(Message.class, message -> "stop".equals(message.name()), s -> getContext().stop(self()))
                 .build();
     }
