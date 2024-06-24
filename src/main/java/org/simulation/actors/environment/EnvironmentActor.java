@@ -80,8 +80,9 @@ public class EnvironmentActor extends AbstractActor {
             tl.step(dt);
         }
         this.actualNumStep++;
+
         /* clean actions */
-        this.cleanActions();
+        submittedActions.clear();
 
         /* ask each agent to make a step */
         getContext().actorSelection("/user/car-*").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
@@ -116,16 +117,6 @@ public class EnvironmentActor extends AbstractActor {
             count = 0;
             getSelf().tell(new Message<>("process-actions", null), ActorRef.noSender());
         }
-    }
-
-    /**
-     *
-     * Called at each simulation step to clean the list of actions
-     * submitted by agents
-     *
-     */
-    private void cleanActions() {
-        submittedActions.clear();
     }
 
     /**
@@ -220,7 +211,6 @@ public class EnvironmentActor extends AbstractActor {
                 .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(0)))
                 .match(Message.class, message -> "get-current-percepts".equals(message.name()), message -> getSender().tell(getCurrentPercepts((String) message.contents().get(0)), getSelf()))
                 .match(Message.class, message -> "submit-action".equals(message.name()), message -> submitAction((Action) message.contents().get(0)))
-                .match(Message.class, message -> "clean-actions".equals(message.name()), message -> cleanActions())
                 .match(Message.class, message -> "process-actions".equals(message.name()), message -> processActions())
                 .match(Message.class, message -> "create-road".equals(message.name()), message -> getSender().tell(createRoad((P2d) message.contents().get(0), (P2d) message.contents().get(1)), getSelf()))
                 .match(Message.class, message -> "create-traffic-light".equals(message.name()), message -> getSender().tell(createTrafficLight((P2d) message.contents().get(0), (TrafficLight.TrafficLightState) message.contents().get(1), (Integer) message.contents().get(2), (Integer) message.contents().get(3), (Integer) message.contents().get(4)), getSelf()))
