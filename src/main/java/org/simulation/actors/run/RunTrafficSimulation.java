@@ -23,6 +23,6 @@ public class RunTrafficSimulation {
 		simulation.addSimulationListener(stat);
 		simulation.addSimulationListener(view);
 
-		simulation.run(1000000000);
+		simulation.run(100000);
 	}
 }

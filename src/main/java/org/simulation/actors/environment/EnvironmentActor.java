@@ -64,7 +64,14 @@ public class EnvironmentActor extends AbstractActor {
      */
     private void step(int dt) {
         this.dt = dt;
+        getContext().actorSelection("/user/gui").tell(new Message<>("set-current", List.of()), ActorRef.noSender());
         if (this.actualNumStep == this.nstep) {
+            getContext().actorSelection("/user/gui").tell(new Message<>("set-end", null), ActorRef.noSender());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             getContext().system().terminate();
             return;
         }
@@ -149,6 +156,7 @@ public class EnvironmentActor extends AbstractActor {
                 }
             }
         }
+        getContext().actorSelection("/user/gui").tell(new Message<>("new-step", List.of(dt, getContext().system())), ActorRef.noSender());
         System.out.println("Pronto per prox step");
 
         getSelf().tell(new Message<>("step", List.of(dt)), ActorRef.noSender());

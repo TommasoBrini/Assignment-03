@@ -3,16 +3,21 @@ package org.simulation.actors.environment;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.pattern.Patterns;
+import org.simulation.actors.util.CarPercept;
 import org.simulation.actors.util.Message;
 import org.simulation.actors.car.CarAgentActor;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public abstract class AbstractSimulation {
     protected ActorSystem system;
-    /* simulation listeners */
-    private List<SimulationListener> listeners;
 
     /* logical time step */
     private int dt;
@@ -20,24 +25,15 @@ public abstract class AbstractSimulation {
     /* initial logical time */
     private int t0;
 
-    /* in the case of sync with wall-time */
-    private boolean toBeInSyncWithWallTime;
-    private int nStepsPerSec;
-
-    /* for time statistics*/
-    private long currentWallTime;
-    private long startWallTime;
-    private long endWallTime;
-    private long averageTimePerStep;
     protected int numCar;
 
     protected AbstractSimulation(int numCar){
         system = ActorSystem.create("TrafficSimulation");
         system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
+        system.actorOf(Props.create(GUIActor.class), "gui");
+        System.out.println("creato gui and statistics communicator");
         System.out.println("creato env");
         this.numCar = numCar;
-        listeners = new ArrayList<>();
-        toBeInSyncWithWallTime = false;
     }
 
     /**
@@ -55,7 +51,7 @@ public abstract class AbstractSimulation {
      */
     public void run(int numSteps) {
 
-        startWallTime = System.currentTimeMillis();
+        system.actorSelection("/user/gui").tell(new Message<>("set-start", List.of(numSteps)), ActorRef.noSender());
 
         /* initialize the env and the agents inside */
         int t = t0;
@@ -67,42 +63,32 @@ public abstract class AbstractSimulation {
 
         this.notifyReset(t);
 
-        long timePerStep = 0;
-
-        currentWallTime = System.currentTimeMillis();
-
         System.out.println("Step: " + t);
         /* make a step */
         system.actorSelection("/user/env").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
-        this.notifyNewStep(t);
-        //TODO: stats for the simulation
-        /*
-        t += dt;
-
-        /* process actions submitted to the environment
-
-        system.actorSelection("/user/env").tell(new Message<>("process-actions", null), ActorRef.noSender());
-
-        notifyNewStep(t);
-
-        nSteps++;
-        timePerStep += System.currentTimeMillis() - currentWallTime;
-
-        if (toBeInSyncWithWallTime) {
-            syncWithWallTime();
-        }*/
-
-        endWallTime = System.currentTimeMillis();
-        this.averageTimePerStep = timePerStep / numSteps;
-
     }
 
     public long getSimulationDuration() {
-        return endWallTime - startWallTime;
+        long dur;
+        Future<Object> future = Patterns.ask(system.actorSelection("/user/gui"), new Message<>("get-duration", List.of()), 1000);
+        try {
+            dur = (long) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+        } catch (TimeoutException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return dur;
     }
 
     public long getAverageTimePerCycle() {
-        return averageTimePerStep;
+        long avg;
+        Future<Object> future = Patterns.ask(system.actorSelection("/user/gui"), new Message<>("get-average-time-per-cycle", List.of()), 1000);
+        try {
+            avg = (long) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+        } catch (TimeoutException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        system.actorSelection("/user/gui").tell(new Message<>("get-average-time-per-cycle", List.of()), ActorRef.noSender());
+        return avg;
     }
 
     /* methods for configuring the simulation */
@@ -113,40 +99,17 @@ public abstract class AbstractSimulation {
     }
 
     protected void syncWithTime(int nCyclesPerSec) {
-        this.toBeInSyncWithWallTime = true;
-        this.nStepsPerSec = nCyclesPerSec;
+        system.actorSelection("/user/gui").tell(new Message<>("sync-with-time", List.of(nCyclesPerSec)), ActorRef.noSender());
     }
 
     /* methods for listeners */
 
     public void addSimulationListener(SimulationListener l) {
-        this.listeners.add(l);
+        System.out.println("Adding listener");
+        system.actorSelection("/user/gui").tell(new Message<>("add-listener", List.of(l)), ActorRef.noSender());
     }
 
     private void notifyReset(int t0) {
-        for (var l: listeners) {
-            l.notifyInit(t0);
-        }
+        system.actorSelection("/user/gui").tell(new Message<>("reset", List.of(t0)), ActorRef.noSender());
     }
-
-    private void notifyNewStep(int t) {
-        for (var l: listeners) {
-            l.notifyStepDone(t, system);
-        }
-    }
-
-    /* method to sync with wall time at a specified step rate */
-
-    private void syncWithWallTime() {
-        try {
-            long newWallTime = System.currentTimeMillis();
-            long delay = 1000 / this.nStepsPerSec;
-            long wallTimeDT = newWallTime - currentWallTime;
-            if (wallTimeDT < delay) {
-                Thread.sleep(delay - wallTimeDT);
-            }
-        } catch (Exception ex) {}
-    }
-
-
 }
