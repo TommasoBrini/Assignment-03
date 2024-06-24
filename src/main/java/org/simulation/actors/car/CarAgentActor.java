@@ -191,7 +191,7 @@ public class CarAgentActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(Message.class, message -> "get-id".equals(message.name()), message -> getSender().tell(getId(), getSelf()))
-                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(1)))
+                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(0)))
                 .match(Message.class, message -> "get-current-speed".equals(message.name()), message -> getSender().tell(getCurrentSpeed(), getSelf()))
                 .match(Message.class, message -> "stop".equals(message.name()), s -> getContext().stop(self()))
                 .build();

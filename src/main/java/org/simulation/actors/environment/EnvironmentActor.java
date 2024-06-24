@@ -157,6 +157,7 @@ public class EnvironmentActor extends AbstractActor {
     private Road createRoad(P2d p0, P2d p1) {
         Road r = new Road(p0, p1);
         this.roads.add(r);
+        System.out.println("Road created");
         return r;
     }
 
@@ -210,18 +211,19 @@ public class EnvironmentActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(Message.class, message -> "get-id".equals(message.name()), message -> getSender().tell(getId(), getSelf()))
-                .match(Message.class, message -> "init".equals(message.name()), message -> init((Integer) message.contents().get(1), (Integer) message.contents().get(2)))
-                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(1)))
-                .match(Message.class, message -> "get-current-percepts".equals(message.name()), message -> getSender().tell(getCurrentPercepts((String) message.contents().get(1)), getSelf()))
-                .match(Message.class, message -> "submit-action".equals(message.name()), message -> submitAction((Action) message.contents().get(1)))
+                .match(Message.class, message -> "init".equals(message.name()), message -> init((Integer) message.contents().get(0), (Integer) message.contents().get(1)))
+                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(0)))
+                .match(Message.class, message -> "get-current-percepts".equals(message.name()), message -> getSender().tell(getCurrentPercepts((String) message.contents().get(0)), getSelf()))
+                .match(Message.class, message -> "submit-action".equals(message.name()), message -> submitAction((Action) message.contents().get(0)))
                 .match(Message.class, message -> "clean-actions".equals(message.name()), message -> cleanActions())
                 .match(Message.class, message -> "process-actions".equals(message.name()), message -> processActions())
-                .match(Message.class, message -> "create-road".equals(message.name()), message -> getSender().tell(createRoad((P2d) message.contents().get(1), (P2d) message.contents().get(2)), getSelf()))
-                .match(Message.class, message -> "create-traffic-light".equals(message.name()), message -> getSender().tell(createTrafficLight((P2d) message.contents().get(1), (TrafficLight.TrafficLightState) message.contents().get(2), (Integer) message.contents().get(3), (Integer) message.contents().get(4), (Integer) message.contents().get(5)), getSelf()))
+                .match(Message.class, message -> "create-road".equals(message.name()), message -> getSender().tell(createRoad((P2d) message.contents().get(0), (P2d) message.contents().get(1)), getSelf()))
+                //.match(Message.class, message -> "create-road".equals(message.name()), message -> createRoad((P2d) message.contents().get(0), (P2d) message.contents().get(1)))
+                .match(Message.class, message -> "create-traffic-light".equals(message.name()), message -> getSender().tell(createTrafficLight((P2d) message.contents().get(0), (TrafficLight.TrafficLightState) message.contents().get(1), (Integer) message.contents().get(2), (Integer) message.contents().get(3), (Integer) message.contents().get(4)), getSelf()))
                 .match(Message.class, message -> "get-agent-info".equals(message.name()), message -> getSender().tell(getAgentInfo(), getSelf()))
                 .match(Message.class, message -> "get-roads".equals(message.name()), message -> getSender().tell(getRoads(), getSelf()))
                 .match(Message.class, message -> "get-traffic-lights".equals(message.name()), message -> getSender().tell(getTrafficLights(), getSelf()))
-                .match(Message.class, message -> "register-car".equals(message.name()), message -> registerNewCar((String) message.contents().get(1), (CarAgentActor) message.contents().get(2), (Road) message.contents().get(3), (Double) message.contents().get(4)))
+                .match(Message.class, message -> "register-car".equals(message.name()), message -> registerNewCar((String) message.contents().get(0), (CarAgentActor) message.contents().get(1), (Road) message.contents().get(2), (Double) message.contents().get(3)))
                 .build();
     }
 
