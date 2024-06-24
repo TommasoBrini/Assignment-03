@@ -4,14 +4,11 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.pattern.Patterns;
-import org.simulation.actors.util.CarPercept;
 import org.simulation.actors.util.Message;
-import org.simulation.actors.car.CarAgentActor;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -25,7 +22,7 @@ public abstract class AbstractSimulation {
     /* initial logical time */
     private int t0;
 
-    protected int numCar;
+    protected int numCars;
 
     protected AbstractSimulation(int numCar){
         system = ActorSystem.create("TrafficSimulation");
@@ -33,7 +30,7 @@ public abstract class AbstractSimulation {
         system.actorOf(Props.create(GUIActor.class), "gui");
         System.out.println("creato gui and statistics communicator");
         System.out.println("creato env");
-        this.numCar = numCar;
+        this.numCars = numCar;
     }
 
     /**
@@ -56,7 +53,7 @@ public abstract class AbstractSimulation {
         /* initialize the env and the agents inside */
         int t = t0;
 
-        system.actorSelection("/user/env").tell(new Message<>("init", List.of(numSteps, numCar)), ActorRef.noSender());
+        system.actorSelection("/user/env").tell(new Message<>("init", List.of(numSteps, numCars)), ActorRef.noSender());
         for (int i = 0; i < 4; i++) {
             system.actorSelection("/user/car-" + i).tell(new Message<>("init", null), ActorRef.noSender());
         }
