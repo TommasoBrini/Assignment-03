@@ -1,6 +1,7 @@
 package org.simulation.actors.environment;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import org.simulation.actors.util.Message;
 
@@ -65,6 +66,7 @@ public class GUIActor extends AbstractActor {
             l.notifyStepDone(t, system);
         }
         System.out.println("notify new step ");
+        getContext().actorSelection("/user/env").tell(new Message<>("step", List.of(t)), ActorRef.noSender());
     }
 
     private void syncWithWallTime() {

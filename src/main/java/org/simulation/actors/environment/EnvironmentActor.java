@@ -158,8 +158,6 @@ public class EnvironmentActor extends AbstractActor {
         }
         getContext().actorSelection("/user/gui").tell(new Message<>("new-step", List.of(dt, getContext().system())), ActorRef.noSender());
         System.out.println("Pronto per prox step");
-
-        getSelf().tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
     }
 
     private Road createRoad(P2d p0, P2d p1) {
