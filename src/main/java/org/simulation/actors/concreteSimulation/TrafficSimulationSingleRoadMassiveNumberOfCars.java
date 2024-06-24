@@ -17,10 +17,8 @@ import java.util.concurrent.TimeoutException;
 
 public class TrafficSimulationSingleRoadMassiveNumberOfCars extends AbstractSimulation {
 
-	private int numCars;
 	public TrafficSimulationSingleRoadMassiveNumberOfCars(int numCars) {
 		super(numCars);
-		this.numCars = numCars;
 	}
 	
 	public void setup() {
@@ -41,7 +39,7 @@ public class TrafficSimulationSingleRoadMassiveNumberOfCars extends AbstractSimu
 			double carAcceleration = 1; //  + gen.nextDouble()/2;
 			double carDeceleration = 0.3; //  + gen.nextDouble()/2;
 			double carMaxSpeed = 7; // 4 + gen.nextDouble();
-			system.actorOf(Props.create(CarAgentActor.class, "car-1", r, initialPos, carAcceleration, carDeceleration, carMaxSpeed), carId);
+			system.actorOf(Props.create(CarAgentActor.class, carId, r, initialPos, carAcceleration, carDeceleration, carMaxSpeed), carId);
 
 		}
 		
