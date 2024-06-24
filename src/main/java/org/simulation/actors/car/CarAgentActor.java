@@ -65,8 +65,6 @@ public class CarAgentActor extends AbstractActor {
 
     private void step(int dt) {
 
-        System.out.println("Step for car " + getId() + "...");
-
         Future<Object> future = Patterns.ask(getContext().actorSelection("/user/env"), new Message<>("get-current-percepts", List.of(getId())), 1000);
         try {
             currentPercept = (CarPercept) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
@@ -145,8 +143,6 @@ public class CarAgentActor extends AbstractActor {
                 }
                 break;
         }
-
-        System.out.println("Car " + getId() + " state: " + state + " speed: " + currentSpeed);
 
         if (currentSpeed > 0) {
             selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));

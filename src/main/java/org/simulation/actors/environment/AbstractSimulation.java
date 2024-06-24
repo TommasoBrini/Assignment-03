@@ -28,8 +28,6 @@ public abstract class AbstractSimulation {
         system = ActorSystem.create("TrafficSimulation");
         system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
         system.actorOf(Props.create(GUIActor.class), "gui");
-        System.out.println("creato gui and statistics communicator");
-        System.out.println("creato env");
         this.numCars = numCar;
     }
 
@@ -60,7 +58,6 @@ public abstract class AbstractSimulation {
 
         this.notifyReset(t);
 
-        System.out.println("Step: " + t);
         /* make a step */
         system.actorSelection("/user/env").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
     }
@@ -102,7 +99,6 @@ public abstract class AbstractSimulation {
     /* methods for listeners */
 
     public void addSimulationListener(SimulationListener l) {
-        System.out.println("Adding listener");
         system.actorSelection("/user/gui").tell(new Message<>("add-listener", List.of(l)), ActorRef.noSender());
     }
 

@@ -32,7 +32,6 @@ public class GUIActor extends AbstractActor {
     }
 
     private void addSimulationListener(SimulationListener listener){
-        System.out.println("Adding listener" + listener.getClass().getName());
         listeners.add(listener);
     }
 
@@ -51,7 +50,6 @@ public class GUIActor extends AbstractActor {
     }
 
     private void notifyReset(int t0){
-        System.out.println("Resetting simulation");
         for (var listener: listeners){
             listener.notifyInit(t0);
         }
@@ -65,7 +63,6 @@ public class GUIActor extends AbstractActor {
         for (var l: listeners) {
             l.notifyStepDone(t, system);
         }
-        System.out.println("notify new step ");
         getContext().actorSelection("/user/env").tell(new Message<>("step", List.of(t)), ActorRef.noSender());
     }
 

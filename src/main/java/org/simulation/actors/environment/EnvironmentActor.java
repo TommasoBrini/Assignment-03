@@ -75,7 +75,6 @@ public class EnvironmentActor extends AbstractActor {
             getContext().system().terminate();
             return;
         }
-        System.out.println("ENV STEP " + this.actualNumStep + "... max step: " + this.nstep);
         for (var tl: trafficLights) {
             tl.step(dt);
         }
@@ -147,13 +146,11 @@ public class EnvironmentActor extends AbstractActor {
             }
         }
         getContext().actorSelection("/user/gui").tell(new Message<>("new-step", List.of(dt, getContext().system())), ActorRef.noSender());
-        System.out.println("Pronto per prox step");
     }
 
     private Road createRoad(P2d p0, P2d p1) {
         Road r = new Road(p0, p1);
         this.roads.add(r);
-        System.out.println("Road created");
         return r;
     }
 

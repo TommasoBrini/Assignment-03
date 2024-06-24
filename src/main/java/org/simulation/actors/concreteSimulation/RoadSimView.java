@@ -53,9 +53,7 @@ public class RoadSimView extends JFrame implements SimulationListener {
 
 	@Override
 	public void notifyStepDone(int td, ActorSystem system) {
-		// getRoads dall'env
-		System.out.println(system.name());
-		//panel.update(e.getRoads(), e.getAgentInfo(), e.getTrafficLights());
+
 		List<Road> roads;
 		List<CarAgentInfo> info;
 		List<TrafficLight> sems;
