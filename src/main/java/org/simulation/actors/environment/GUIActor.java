@@ -58,7 +58,7 @@ public class GUIActor extends AbstractActor {
     }
 
     private void notifyNewStep(int t, ActorSystem system){
-        timePerStep *= System.currentTimeMillis() - currentWallTime;
+        timePerStep += System.currentTimeMillis() - currentWallTime;
         if (toBeInSyncWithWallTime) {
             syncWithWallTime();
         }

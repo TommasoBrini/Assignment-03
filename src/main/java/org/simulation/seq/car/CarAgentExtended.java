@@ -98,11 +98,15 @@ public class CarAgentExtended extends CarAgent {
 			}
 			break;		
 		}
-		
+
+		System.out.println("Car " + getId() + " state: " + state + " speed: " + currentSpeed);
+
 		if (currentSpeed > 0) {
 			selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));
 		}
-
+		if (selectedAction.isPresent()) {
+			System.out.println("Car " + getId() + " selected action: " + selectedAction.get());
+		}
 	}
 		
 	private boolean detectedNearCar() {

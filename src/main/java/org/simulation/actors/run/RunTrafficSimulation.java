@@ -3,6 +3,7 @@ package org.simulation.actors.run;
 import org.simulation.actors.concreteSimulation.RoadSimStatistics;
 import org.simulation.actors.concreteSimulation.RoadSimView;
 import org.simulation.actors.concreteSimulation.TrafficSimulationSingleRoadTwoCars;
+import org.simulation.actors.concreteSimulation.TrafficSimulationWithCrossRoads;
 
 /**
  * 
@@ -13,7 +14,8 @@ public class RunTrafficSimulation {
 
 	public static void main(String[] args) {		
 
-		var simulation = new TrafficSimulationSingleRoadTwoCars();
+		//var simulation = new TrafficSimulationSingleRoadTwoCars();
+		var simulation = new TrafficSimulationWithCrossRoads();
 		simulation.setup();
 
 		RoadSimStatistics stat = new RoadSimStatistics();

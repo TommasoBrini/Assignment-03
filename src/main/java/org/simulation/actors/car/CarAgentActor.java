@@ -6,11 +6,10 @@ import akka.actor.ActorRef;
 import akka.pattern.Patterns;
 import org.simulation.actors.util.Message;
 import org.simulation.actors.environment.Road;
-import org.simulation.actors.car.CarAgentInfo;
 import org.simulation.actors.util.Action;
 import org.simulation.actors.util.CarPercept;
-import org.simulation.actors.util.MoveForward;
 import org.simulation.actors.util.TrafficLightInfo;
+import org.simulation.actors.util.MoveForward;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -75,6 +74,7 @@ public class CarAgentActor extends AbstractActor {
             throw new RuntimeException(e);
         }
 
+
         /* decide */
         selectedAction = Optional.empty();
 
@@ -90,7 +90,7 @@ public class CarAgentActor extends AbstractActor {
         return currentSpeed;
     }
 
-    private void decide(int dt){
+    public void decide(int dt) {
         switch (state) {
             case STOPPED:
                 if (!detectedNearCar()) {
@@ -145,6 +145,8 @@ public class CarAgentActor extends AbstractActor {
                 }
                 break;
         }
+
+        System.out.println("Car " + getId() + " state: " + state + " speed: " + currentSpeed);
 
         if (currentSpeed > 0) {
             selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));

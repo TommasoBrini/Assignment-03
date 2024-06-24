@@ -81,7 +81,7 @@ public class EnvironmentActor extends AbstractActor {
         }
         this.actualNumStep++;
         /* clean actions */
-        getSelf().tell(new Message<>("clear-actions", null), ActorRef.noSender());
+        this.cleanActions();
 
         /* ask each agent to make a step */
         getContext().actorSelection("/user/car-*").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
@@ -135,7 +135,6 @@ public class EnvironmentActor extends AbstractActor {
      *
      */
     private void processActions() {
-        // TODO: gestire le azioni da fare
         for (var act: submittedActions) {
             if (act instanceof MoveForward) {
                 MoveForward mv = (MoveForward) act;
@@ -224,7 +223,6 @@ public class EnvironmentActor extends AbstractActor {
                 .match(Message.class, message -> "clean-actions".equals(message.name()), message -> cleanActions())
                 .match(Message.class, message -> "process-actions".equals(message.name()), message -> processActions())
                 .match(Message.class, message -> "create-road".equals(message.name()), message -> getSender().tell(createRoad((P2d) message.contents().get(0), (P2d) message.contents().get(1)), getSelf()))
-                //.match(Message.class, message -> "create-road".equals(message.name()), message -> createRoad((P2d) message.contents().get(0), (P2d) message.contents().get(1)))
                 .match(Message.class, message -> "create-traffic-light".equals(message.name()), message -> getSender().tell(createTrafficLight((P2d) message.contents().get(0), (TrafficLight.TrafficLightState) message.contents().get(1), (Integer) message.contents().get(2), (Integer) message.contents().get(3), (Integer) message.contents().get(4)), getSelf()))
                 .match(Message.class, message -> "get-agent-info".equals(message.name()), message -> getSender().tell(getAgentInfo(), getSelf()))
                 .match(Message.class, message -> "get-roads".equals(message.name()), message -> getSender().tell(getRoads(), getSelf()))
