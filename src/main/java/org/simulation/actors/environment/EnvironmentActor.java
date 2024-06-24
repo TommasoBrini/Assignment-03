@@ -64,11 +64,11 @@ public class EnvironmentActor extends AbstractActor {
      */
     private void step(int dt) {
         this.dt = dt;
-        if (this.actualNumStep == 10) {
+        if (this.actualNumStep == this.nstep) {
             getContext().system().terminate();
             return;
         }
-        System.out.println("ENV STEP" + this.actualNumStep + "... max step: " + this.nstep);
+        System.out.println("ENV STEP " + this.actualNumStep + "... max step: " + this.nstep);
         for (var tl: trafficLights) {
             tl.step(dt);
         }

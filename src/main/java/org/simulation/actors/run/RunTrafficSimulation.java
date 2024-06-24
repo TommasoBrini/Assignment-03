@@ -16,12 +16,12 @@ public class RunTrafficSimulation {
 		var simulation = new TrafficSimulationSingleRoadTwoCars();
 		simulation.setup();
 
-		RoadSimStatistics stat = new RoadSimStatistics();
-		RoadSimView view = new RoadSimView();
-		view.display();
-
-		simulation.addSimulationListener(stat);
-		simulation.addSimulationListener(view);
+//		RoadSimStatistics stat = new RoadSimStatistics();
+//		RoadSimView view = new RoadSimView();
+//		view.display();
+//
+//		simulation.addSimulationListener(stat);
+//		simulation.addSimulationListener(view);
 		simulation.run(10);
 	}
 }

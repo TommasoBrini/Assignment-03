@@ -1,12 +1,22 @@
 package org.simulation.actors.concreteSimulation;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
+import akka.actor.ActorSystem;
 import org.simulation.actors.car.CarAgentInfo;
 import org.simulation.actors.environment.*;
+import org.simulation.actors.util.Message;
 import org.simulation.actors.util.V2d;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import akka.pattern.Patterns;
+import scala.concurrent.duration.Duration;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class RoadSimView extends JFrame implements SimulationListener {
 
@@ -39,16 +49,36 @@ public class RoadSimView extends JFrame implements SimulationListener {
 	@Override
 	public void notifyInit(int t) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void notifyStepDone(int td) {
+	public void notifyStepDone(int td, ActorSystem system) {
 		// getRoads dall'env
 
 		//panel.update(e.getRoads(), e.getAgentInfo(), e.getTrafficLights());
+		List<Road> roads;
+		List<CarAgentInfo> info;
+		List<TrafficLight> sems;
+		Future<Object> future = Patterns.ask(system.actorSelection("/user/env"), new Message<>("get-roads", null), 1000);
+		try {
+			roads = (List<Road>) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+		} catch (TimeoutException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+		future = Patterns.ask(system.actorSelection("/user/env"), new Message<>("get-agent-info", null), 1000);
+		try {
+			info = (List<CarAgentInfo>) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+		} catch (TimeoutException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+		future = Patterns.ask(system.actorSelection("/user/env"), new Message<>("get-traffic-lights", null), 1000);
+		try {
+			sems = (List<TrafficLight>) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+		} catch (TimeoutException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+		panel.update(roads, info, sems);
 	}
-	
 	
 	class RoadSimViewPanel extends JPanel {
 		

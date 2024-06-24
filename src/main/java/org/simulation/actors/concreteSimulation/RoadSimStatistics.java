@@ -1,5 +1,6 @@
 package org.simulation.actors.concreteSimulation;
 
+import akka.actor.ActorSystem;
 import org.simulation.actors.environment.SimulationListener;
 
 /**
@@ -25,7 +26,7 @@ public class RoadSimStatistics implements SimulationListener {
 	}
 
 	@Override
-	public void notifyStepDone(int t) {
+	public void notifyStepDone(int t, ActorSystem system) {
 		double avSpeed = 0;
 		
 		maxSpeed = -1;

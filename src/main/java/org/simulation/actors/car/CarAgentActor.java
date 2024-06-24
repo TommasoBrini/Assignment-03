@@ -65,7 +65,6 @@ public class CarAgentActor extends AbstractActor {
     }
 
     private void step(int dt) {
-        System.out.println("Step for car " + getId() + "...");
 
         Future<Object> future = Patterns.ask(getContext().actorSelection("/user/env"), new Message<>("get-current-percepts", List.of(getId())), 1000);
         try {
@@ -73,7 +72,7 @@ public class CarAgentActor extends AbstractActor {
         } catch (TimeoutException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        System.out.println("Step for car " + getId() + "...");
         /* decide */
         selectedAction = Optional.empty();
 

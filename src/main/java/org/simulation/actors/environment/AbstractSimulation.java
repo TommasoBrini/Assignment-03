@@ -74,7 +74,7 @@ public abstract class AbstractSimulation {
         System.out.println("Step: " + t);
         /* make a step */
         system.actorSelection("/user/env").tell(new Message<>("step", List.of(dt)), ActorRef.noSender());
-
+        this.notifyNewStep(t);
         //TODO: stats for the simulation
         /*
         t += dt;
@@ -131,7 +131,7 @@ public abstract class AbstractSimulation {
 
     private void notifyNewStep(int t) {
         for (var l: listeners) {
-            l.notifyStepDone(t);
+            l.notifyStepDone(t, system);
         }
     }
 

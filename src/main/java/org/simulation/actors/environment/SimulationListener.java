@@ -1,5 +1,6 @@
 package org.simulation.actors.environment;
 
+import akka.actor.ActorSystem;
 import org.simulation.seq.car.AbstractAgent;
 import org.simulation.seq.environment.AbstractEnvironment;
 
@@ -18,5 +19,5 @@ public interface SimulationListener {
 	 * Called at each step, updater all updates
 	 * @param t
 	 */
-	void notifyStepDone(int t);
+	void notifyStepDone(int t, ActorSystem system);
 }
