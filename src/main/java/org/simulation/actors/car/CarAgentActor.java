@@ -6,11 +6,11 @@ import akka.actor.ActorRef;
 import akka.pattern.Patterns;
 import org.simulation.actors.util.Message;
 import org.simulation.actors.environment.Road;
-import org.simulation.seq.car.CarAgentInfo;
-import org.simulation.seq.util.Action;
-import org.simulation.seq.util.CarPercept;
-import org.simulation.seq.util.MoveForward;
-import org.simulation.seq.util.TrafficLightInfo;
+import org.simulation.actors.car.CarAgentInfo;
+import org.simulation.actors.util.Action;
+import org.simulation.actors.util.CarPercept;
+import org.simulation.actors.util.MoveForward;
+import org.simulation.actors.util.TrafficLightInfo;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -66,13 +66,15 @@ public class CarAgentActor extends AbstractActor {
 
     private void step(int dt) {
 
+        System.out.println("Step for car " + getId() + "...");
+
         Future<Object> future = Patterns.ask(getContext().actorSelection("/user/env"), new Message<>("get-current-percepts", List.of(getId())), 1000);
         try {
-            currentPercept = (CarPercept) Await.result(future, Duration.create(5, TimeUnit.SECONDS));
+            currentPercept = (CarPercept) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
         } catch (TimeoutException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Step for car " + getId() + "...");
+
         /* decide */
         selectedAction = Optional.empty();
 
