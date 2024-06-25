@@ -1,7 +1,16 @@
 package org.simulation.actors.concreteSimulation;
 
 import akka.actor.ActorSystem;
+import akka.pattern.Patterns;
 import org.simulation.actors.environment.SimulationListener;
+import org.simulation.actors.util.Message;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Simple class keeping track of some statistics about a traffic simulation
@@ -14,8 +23,10 @@ public class RoadSimStatistics implements SimulationListener {
 	private double averageSpeed;
 	private double minSpeed;
 	private double maxSpeed;
-	
-	public RoadSimStatistics() {
+	private final int nCars;
+
+	public RoadSimStatistics(int ncars) {
+		this.nCars = ncars;
 	}
 	
 	@Override
@@ -32,22 +43,24 @@ public class RoadSimStatistics implements SimulationListener {
 		maxSpeed = -1;
 		minSpeed = Double.MAX_VALUE;
 
-		/*
-		for (var agent: agents) {
-			CarAgent car = (CarAgent) agent;
-			double currSpeed = car.getCurrentSpeed();
-			avSpeed += currSpeed;			
-			if (currSpeed > maxSpeed) {
-				maxSpeed = currSpeed;
-			} else if (currSpeed < minSpeed) {
-				minSpeed = currSpeed;
+		for(var i = 0; i < nCars; i++){
+			Future<Object> future = Patterns.ask(system.actorSelection("/user/car*"), new Message<>("get-current-speed", List.of()), 1000);
+			try {
+				double currSpeed = (double) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+				avSpeed += currSpeed;
+				if (currSpeed > maxSpeed) {
+					maxSpeed = currSpeed;
+				} else if (currSpeed < minSpeed) {
+					minSpeed = currSpeed;
+				}
+			} catch (TimeoutException | InterruptedException e) {
+				throw new RuntimeException(e);
 			}
 		}
-		
-		if (agents.size() > 0) {
-			avSpeed /= agents.size();
+		if (nCars > 0) {
+			avSpeed /= nCars;
 		}
-		log("average speed: " + avSpeed);*/
+		log("average speed: " + avSpeed);
 	}
 	
 	public double getAverageSpeed() {

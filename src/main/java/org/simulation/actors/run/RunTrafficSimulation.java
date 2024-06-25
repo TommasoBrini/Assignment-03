@@ -17,7 +17,7 @@ public class RunTrafficSimulation {
 		var simulation = new TrafficSimulationSingleRoadWithTrafficLightTwoCars();
 		simulation.setup();
 
-		RoadSimStatistics stat = new RoadSimStatistics();
+		RoadSimStatistics stat = new RoadSimStatistics(simulation.getNumCars());
 		RoadSimView view = new RoadSimView();
 		view.display();
 

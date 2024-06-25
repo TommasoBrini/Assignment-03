@@ -105,4 +105,21 @@ public abstract class AbstractSimulation {
     private void notifyReset(int t0) {
         system.actorSelection("/user/gui").tell(new Message<>("reset", List.of(t0)), ActorRef.noSender());
     }
+
+    public int getNumCars() {
+        return numCars;
+    }
+
+    public boolean isCompleted(){
+        Future<Object> future = Patterns.ask(system.actorSelection("/user/env"), new Message<>("is-completed", List.of()), 1000);
+        try {
+            return (boolean) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
+        } catch (TimeoutException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void shutdown() {
+        system.terminate();
+    }
 }

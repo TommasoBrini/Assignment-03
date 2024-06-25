@@ -31,6 +31,7 @@ public class EnvironmentActor extends AbstractActor {
 
     /* cars situated in the environment */
     private HashMap<String, CarAgentInfo> registeredCars;
+    private boolean isCompleted = false;
 
     public EnvironmentActor(String id) {
         super();
@@ -72,7 +73,7 @@ public class EnvironmentActor extends AbstractActor {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            getContext().system().terminate();
+            this.isCompleted = true;
             return;
         }
         for (var tl: trafficLights) {
@@ -215,6 +216,7 @@ public class EnvironmentActor extends AbstractActor {
                 .match(Message.class, message -> "get-roads".equals(message.name()), message -> getSender().tell(getRoads(), getSelf()))
                 .match(Message.class, message -> "get-traffic-lights".equals(message.name()), message -> getSender().tell(getTrafficLights(), getSelf()))
                 .match(Message.class, message -> "register-car".equals(message.name()), message -> registerNewCar((String) message.contents().get(0), (CarAgentActor) message.contents().get(1), (Road) message.contents().get(2), (Double) message.contents().get(3)))
+                .match(Message.class, message -> "is-completed".equals(message.name()), message -> getSender().tell(isCompleted, getSelf()))
                 .build();
     }
 
