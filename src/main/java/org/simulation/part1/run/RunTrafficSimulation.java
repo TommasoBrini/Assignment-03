@@ -1,8 +1,6 @@
 package org.simulation.part1.run;
 
-import org.simulation.part1.concreteSimulation.RoadSimStatistics;
-import org.simulation.part1.concreteSimulation.RoadSimView;
-import org.simulation.part1.concreteSimulation.TrafficSimulationWithCrossRoads;
+import org.simulation.part1.concreteSimulation.*;
 
 /**
  * 
@@ -14,8 +12,8 @@ public class RunTrafficSimulation {
 	public static void main(String[] args) {		
 
 
-		//var simulation = new TrafficSimulationSingleRoadTwoCars();
-		var simulation = new TrafficSimulationWithCrossRoads();
+		var simulation = new TrafficSimulationSingleRoadTwoCars();
+		//var simulation = new TrafficSimulationWithCrossRoads();
 		//var simulation = new TrafficSimulationSingleRoadSeveralCars();
 		//var simulation = new TrafficSimulationSingleRoadWithTrafficLightTwoCars();
 		simulation.setup();

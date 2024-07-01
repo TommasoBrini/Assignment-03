@@ -46,7 +46,6 @@ public class RoadSimView extends JFrame implements SimulationListener {
 
 	@Override
 	public void notifyInit(int t) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override

@@ -30,9 +30,9 @@ public class CarAgentActor extends AbstractActor {
     protected double acceleration;
     protected double deceleration;
     protected CarPercept currentPercepts;
-    private Optional<Action> selectedAction;
+    private Action selectedAction;
 
-    /* CAREXTENDED */
+    /* CAR EXTENDED */
     private static final int CAR_NEAR_DIST = 15;
     private static final int CAR_FAR_ENOUGH_DIST = 20;
     private static final int MAX_WAITING_TIME = 2;
@@ -72,12 +72,12 @@ public class CarAgentActor extends AbstractActor {
         }
 
         /* decide */
-        selectedAction = Optional.empty();
+        //selectedAction = Optional.empty();
 
         decide(dt);
 
         /* act */
-        selectedAction.ifPresent(action -> getContext().actorSelection("/user/env").tell(new Message("submit-action", List.of(action)), ActorRef.noSender()));
+        getContext().actorSelection("/user/env").tell(new Message("submit-action", List.of(selectedAction)), ActorRef.noSender());
     }
 
     private double getCurrentSpeed() {
@@ -141,9 +141,9 @@ public class CarAgentActor extends AbstractActor {
         }
 
         if (currentSpeed > 0) {
-            selectedAction = Optional.of(new MoveForward(getId(), currentSpeed * dt));
+            selectedAction = new MoveForward(getId(), currentSpeed * dt);
         } else {
-            selectedAction = Optional.of(new MoveForward(getId(), 0));
+            selectedAction = new MoveForward(getId(), 0);
         }
     }
 
@@ -186,7 +186,7 @@ public class CarAgentActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(Message.class, message -> "get-id".equals(message.name()), message -> getSender().tell(getId(), getSelf()))
-                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().get(0)))
+                .match(Message.class, message -> "step".equals(message.name()), message -> step((Integer) message.contents().getFirst()))
                 .match(Message.class, message -> "get-current-speed".equals(message.name()), message -> getSender().tell(getCurrentSpeed(), getSelf()))
                 .match(Message.class, message -> "stop".equals(message.name()), s -> getContext().stop(self()))
                 .build();
