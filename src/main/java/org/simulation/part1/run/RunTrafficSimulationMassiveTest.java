@@ -1,7 +1,7 @@
-package org.simulation.first.actors.run;
+package org.simulation.part1.run;
 
 
-import org.simulation.first.actors.concreteSimulation.TrafficSimulationSingleRoadMassiveNumberOfCars;
+import org.simulation.part1.concreteSimulation.TrafficSimulationSingleRoadMassiveNumberOfCars;
 
 public class RunTrafficSimulationMassiveTest {
 

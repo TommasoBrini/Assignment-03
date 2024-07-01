@@ -1,4 +1,4 @@
-package org.simulation.first.actors.environment;
+package org.simulation.part1.environment;
 
 import akka.actor.ActorSystem;
 

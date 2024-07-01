@@ -1,13 +1,12 @@
-package org.simulation.first.actors.car;
+package org.simulation.part1.car;
 
-import org.simulation.first.actors.environment.Road;
+import org.simulation.part1.environment.Road;
 
 public  class CarAgentInfo {
 
 	private final CarAgentActor car;
 	private double pos;
 	private final Road road;
-	//TODO: gestire le info delle car, non avendo più carAgent ma actor
 	
 	public CarAgentInfo(CarAgentActor car, Road road, double pos) {
 		this.car = car;

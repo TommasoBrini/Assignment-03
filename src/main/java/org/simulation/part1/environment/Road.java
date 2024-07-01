@@ -1,7 +1,7 @@
-package org.simulation.first.actors.environment;
+package org.simulation.part1.environment;
 
-import org.simulation.first.actors.util.P2d;
-import org.simulation.first.actors.util.TrafficLightInfo;
+import org.simulation.part1.util.P2d;
+import org.simulation.part1.util.TrafficLightInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
-package org.simulation.first.actors.concreteSimulation;
+package org.simulation.part1.concreteSimulation;
 
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
-import org.simulation.first.actors.environment.SimulationListener;
-import org.simulation.first.actors.util.Message;
+import org.simulation.part1.environment.SimulationListener;
+import org.simulation.part1.util.Message;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;

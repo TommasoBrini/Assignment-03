@@ -1,9 +1,9 @@
-package org.simulation.first.actors.environment;
+package org.simulation.part1.environment;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import org.simulation.first.actors.util.Message;
+import org.simulation.part1.util.Message;
 
 import java.util.ArrayList;
 import java.util.List;

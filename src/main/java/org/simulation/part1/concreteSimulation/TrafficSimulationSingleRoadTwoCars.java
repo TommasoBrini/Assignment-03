@@ -1,12 +1,12 @@
-package org.simulation.first.actors.concreteSimulation;
+package org.simulation.part1.concreteSimulation;
 
 import akka.actor.Props;
 import akka.pattern.Patterns;
-import org.simulation.first.actors.car.CarAgentActor;
-import org.simulation.first.actors.environment.Road;
-import org.simulation.first.actors.util.Message;
-import org.simulation.first.actors.environment.AbstractSimulation;
-import org.simulation.first.actors.util.P2d;
+import org.simulation.part1.car.CarAgentActor;
+import org.simulation.part1.environment.Road;
+import org.simulation.part1.util.Message;
+import org.simulation.part1.environment.AbstractSimulation;
+import org.simulation.part1.util.P2d;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;

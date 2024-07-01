@@ -1,6 +1,6 @@
-package org.simulation.first.actors.util;
+package org.simulation.part1.util;
 
-import org.simulation.first.actors.car.CarAgentInfo;
+import org.simulation.part1.car.CarAgentInfo;
 
 import java.util.Optional;
 

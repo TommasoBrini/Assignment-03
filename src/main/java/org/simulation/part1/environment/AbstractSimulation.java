@@ -1,10 +1,10 @@
-package org.simulation.first.actors.environment;
+package org.simulation.part1.environment;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.pattern.Patterns;
-import org.simulation.first.actors.util.Message;
+import org.simulation.part1.util.Message;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;

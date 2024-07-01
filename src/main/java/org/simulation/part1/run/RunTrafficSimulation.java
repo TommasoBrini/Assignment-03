@@ -1,8 +1,8 @@
-package org.simulation.first.actors.run;
+package org.simulation.part1.run;
 
-import org.simulation.first.actors.concreteSimulation.RoadSimStatistics;
-import org.simulation.first.actors.concreteSimulation.RoadSimView;
-import org.simulation.first.actors.concreteSimulation.TrafficSimulationWithCrossRoads;
+import org.simulation.part1.concreteSimulation.RoadSimStatistics;
+import org.simulation.part1.concreteSimulation.RoadSimView;
+import org.simulation.part1.concreteSimulation.TrafficSimulationWithCrossRoads;
 
 /**
  * 

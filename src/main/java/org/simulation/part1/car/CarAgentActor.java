@@ -1,15 +1,15 @@
-package org.simulation.first.actors.car;
+package org.simulation.part1.car;
 
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.pattern.Patterns;
-import org.simulation.first.actors.util.Message;
-import org.simulation.first.actors.environment.Road;
-import org.simulation.first.actors.util.Action;
-import org.simulation.first.actors.util.CarPercept;
-import org.simulation.first.actors.util.TrafficLightInfo;
-import org.simulation.first.actors.util.MoveForward;
+import org.simulation.part1.util.Message;
+import org.simulation.part1.environment.Road;
+import org.simulation.part1.util.Action;
+import org.simulation.part1.util.CarPercept;
+import org.simulation.part1.util.TrafficLightInfo;
+import org.simulation.part1.util.MoveForward;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;

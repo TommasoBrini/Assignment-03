@@ -1,4 +1,4 @@
-package org.simulation.first.actors.util;
+package org.simulation.part1.util;
 
 /**
  * Base type for defining actions to be executed on the environment

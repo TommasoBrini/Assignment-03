@@ -1,11 +1,12 @@
-package org.simulation.first.actors.environment;
+package org.simulation.part1.environment;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import org.simulation.first.actors.util.*;
-import org.simulation.first.actors.car.CarAgentActor;
-import org.simulation.first.actors.car.CarAgentInfo;
-import org.simulation.first.actors.util.Message;
+import org.simulation.part1.car.CarAgentActor;
+import org.simulation.part1.car.CarAgentInfo;
+import org.simulation.part1.util.Message;
+import org.simulation.part1.util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
