@@ -1,4 +1,4 @@
-package org.simulation.part2A;
+package org.simulation.part2A.model;
 
 import com.rabbitmq.client.*;
 
