@@ -22,23 +22,18 @@ public class Controller implements ActionListener {
         this.startView.getJoinGameButton().addActionListener(this);
 
         this.gridView.getBackButton().addActionListener(this);
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                this.gridView.getGrid()[i][j].addActionListener(this);
-            }
-        }
     }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startView.getCreateGameButton()) {
-            startView.setVisible(false);
-            gridView.setVisible(true);
+            this.startView.setVisible(false);
+            this.gridView.setVisible(true);
         } else if (e.getSource() == startView.getJoinGameButton()) {
 
         } else if (e.getSource() == gridView.getBackButton()) {
-            gridView.setVisible(false);
-            startView.setVisible(true);
-        } // TODO: gestione click su singola casella della griglia
+            this.gridView.setVisible(false);
+            this.startView.setVisible(true);
+        }
+        // TODO: gestione click su singola casella della griglia
     }
 }

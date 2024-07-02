@@ -13,7 +13,6 @@ public class GridView extends JFrame {
     private final JPanel gridPanel;
     private final JPanel centeredGrid;
     private final JButton backButton;
-    private final JTextField[][] grid = new JTextField[NUM_GRID][NUM_CELL_FOR_GRID];
     //private
 
     public GridView() {
@@ -43,7 +42,6 @@ public class GridView extends JFrame {
                 cell.setHorizontalAlignment(JTextField.CENTER); //Center text horizontally in the button.
                 cell.setPreferredSize(new Dimension(80, 80)); //Set the size of the button.
                 smallerGridPanel.add(cell);
-                this.grid[j][i] = cell;
             }
             smallerGridPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
             this.gridPanel.add(smallerGridPanel);
@@ -52,17 +50,16 @@ public class GridView extends JFrame {
 
     public void setGridValues(List<List<Integer>> values) {
         for (int i = 0; i < NUM_GRID; i++) {
-            for (int j = 0; j < NUM_CELL_FOR_GRID; j++) {
-                this.grid[i][j].setText(values.get(i).get(j).toString());
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    JTextField textField = (JTextField) this.gridPanel.getComponent(i).getComponentAt(j,k);
+                    textField.setText(String.valueOf(values.get(j).get(k)));
+                }
             }
         }
     }
 
     public JButton getBackButton() {
         return this.backButton;
-    }
-
-    public JTextField[][] getGrid() {
-        return this.grid;
     }
 }
