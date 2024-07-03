@@ -13,6 +13,7 @@ public class GridController {
     private final User user;
     private final GridView gridView;
     private final StartView startView;
+    private GameDetailsView detailsView;
 
 
     public GridController(User user, StartView startView, GridView gridView) {
@@ -27,24 +28,26 @@ public class GridController {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
-    class BackButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            startView.setVisible(true);
-            gridView.dispose();
-        }
-    }
-
     class GridButtonListener implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             int gridIndex = Integer.parseInt(e.getActionCommand().split(" ")[1]) - 1;
             Grid selectedGrid = user.getGrid(gridIndex);
-            GameDetailsView detailsView = new GameDetailsView();
+            detailsView = new GameDetailsView();
             detailsView.displayGrid(selectedGrid);
+            detailsView.addBackButtonListener(new BackButtonListener());
             detailsView.setVisible(true);
-            startView.dispose();
+            startView.setVisible(false);
+            gridView.setVisible(false);
+        }
+    }
+
+    class BackButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
             gridView.dispose();
+            startView.setVisible(true);
         }
     }
 }
