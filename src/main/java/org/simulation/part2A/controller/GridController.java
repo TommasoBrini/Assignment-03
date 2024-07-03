@@ -46,7 +46,12 @@ public class GridController {
     class BackButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            gridView.dispose();
+            gridView.setVisible(false);
+
+            if (detailsView != null) {
+                    detailsView.setVisible(false);
+            }
+
             startView.setVisible(true);
         }
     }

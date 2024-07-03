@@ -16,7 +16,7 @@ public class GridView extends JFrame {
     public GridView() {
         setTitle("Sudoku Grids");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
