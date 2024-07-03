@@ -1,4 +1,4 @@
-package org.simulation.part2A;
+package org.simulation.part2A.prova;
 import com.rabbitmq.client.*;
 
 public class Test2_Subscriber {

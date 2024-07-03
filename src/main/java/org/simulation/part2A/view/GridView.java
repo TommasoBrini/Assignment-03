@@ -13,7 +13,6 @@ public class GridView extends JFrame {
     private final JPanel gridPanel;
     private final JPanel centeredGrid;
     private final JButton backButton;
-    //private
 
     public GridView() {
         super("Sudoku");
@@ -22,7 +21,7 @@ public class GridView extends JFrame {
         this.backButton.setPreferredSize(new Dimension(50, 50));
         this.backButton.setVerticalAlignment(JButton.TOP);
 
-        gridPanel = new JPanel(new GridLayout(3,4));
+        gridPanel = new JPanel(new GridLayout(3,3));
         this.setGrid();
         centeredGrid = new JPanel(new GridBagLayout());
         centeredGrid.add(backButton);
@@ -41,6 +40,7 @@ public class GridView extends JFrame {
                 final JTextField cell = new JTextField();
                 cell.setHorizontalAlignment(JTextField.CENTER); //Center text horizontally in the button.
                 cell.setPreferredSize(new Dimension(80, 80)); //Set the size of the button.
+
                 smallerGridPanel.add(cell);
             }
             smallerGridPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -48,12 +48,27 @@ public class GridView extends JFrame {
         }
     }
 
-    public void setGridValues(List<List<Integer>> values) {
-        for (int i = 0; i < NUM_GRID; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    JTextField textField = (JTextField) this.gridPanel.getComponent(i).getComponentAt(j,k);
-                    textField.setText(String.valueOf(values.get(j).get(k)));
+    public void setGridValues(int[][] values) {
+        for (int gridRow = 0; gridRow < 3; gridRow++) {
+            for (int gridCol = 0; gridCol < 3; gridCol++) {
+                int gridIndex = gridRow * 3 + gridCol;
+
+                JPanel smallerGridPanel = (JPanel) this.gridPanel.getComponent(gridIndex);
+
+                for (int cellRow = 0; cellRow < 3; cellRow++) {
+                    for (int cellCol = 0; cellCol < 3; cellCol++) {
+                        int rowIndex = gridRow * 3 + cellRow;
+                        int colIndex = gridCol * 3 + cellCol;
+
+                        JTextField textField = (JTextField) smallerGridPanel.getComponent(cellRow * 3 + cellCol);
+
+                        if(values[rowIndex][colIndex] == 0) {
+                            textField.setText("");
+                        } else {
+                        textField.setText(String.valueOf(values[rowIndex][colIndex]));
+                        textField.setEditable(false);
+                        }
+                    }
                 }
             }
         }
