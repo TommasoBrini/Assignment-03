@@ -26,8 +26,7 @@ public class User {
     }
 
     public Grid getGrid(int index){
-        Grid grid = allGrids.get(index);
-        return grid;
+        return allGrids.get(index);
     }
 
 }
