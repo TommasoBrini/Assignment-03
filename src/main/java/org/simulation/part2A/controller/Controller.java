@@ -28,7 +28,7 @@ public class Controller implements ActionListener {
         if (e.getSource() == startView.getCreateGameButton()) {
             this.startView.setVisible(false);
             this.gridView.setVisible(true);
-            //this.gridView.setGridValues(model.getGrid().getValues() ;
+            updateGrid();
         } else if (e.getSource() == startView.getJoinGameButton()) {
 
         } else if (e.getSource() == gridView.getBackButton()) {
@@ -36,5 +36,9 @@ public class Controller implements ActionListener {
             this.startView.setVisible(true);
         }
         // TODO: gestione click su singola casella della griglia
+    }
+    
+    private void updateGrid() {
+        //this.gridView.setGridValues(this.model.getGrid().getValues());
     }
 }

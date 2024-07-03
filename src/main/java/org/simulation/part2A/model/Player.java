@@ -19,7 +19,7 @@ public class Player {
         this.grid = new Grid();
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost(host);
         this.connection = factory.newConnection();
         this.channel = connection.createChannel();
 
