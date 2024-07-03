@@ -12,9 +12,11 @@ public class Player {
     private String playerId;
     private Connection connection;
     private Channel channel;
+    private Grid grid;
 
     public Player(String playerId, String host) throws IOException, TimeoutException {
         this.playerId = playerId;
+        this.grid = new Grid();
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -51,6 +53,10 @@ public class Player {
     private void onGridMessage(String message) {
         // Handle grid update
         System.out.println("Received grid update: " + message);
+    }
+
+    public Grid getGrid() {
+        return grid;
     }
 
     public void close() throws IOException, TimeoutException {

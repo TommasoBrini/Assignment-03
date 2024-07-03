@@ -28,6 +28,7 @@ public class Controller implements ActionListener {
         if (e.getSource() == startView.getCreateGameButton()) {
             this.startView.setVisible(false);
             this.gridView.setVisible(true);
+            //this.gridView.setGridValues(model.getGrid().getValues() ;
         } else if (e.getSource() == startView.getJoinGameButton()) {
 
         } else if (e.getSource() == gridView.getBackButton()) {
