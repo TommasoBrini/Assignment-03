@@ -1,17 +1,32 @@
 package org.simulation.part2A.model;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import org.simulation.part2A.utils.Utils;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
 
 public class Grid {
 
     private final int id;
     private final Cell[][] grid;
+    private static final String EXCHANGE_NAME = "logs";
+    private final Channel channel;
 
-    public Grid(int id) {
+    public Grid(int id, String userId) throws IOException, TimeoutException {
         this.id = id;
         this.grid = this.generateGrid(Utils.generateInitialGrid());
+
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        channel = factory.newConnection().createChannel();
+        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        channel.queueDeclare(id + ":" + userId, false, false, false, null);
+
+        //channel.basicPublish(EXCHANGE_NAME, "", null, (id + " " + Utils.gridToString(grid)).getBytes());
     }
 
     private Cell[][] generateGrid(int[][] initialGrid){
@@ -28,11 +43,13 @@ public class Grid {
         return grid[row][col].getValue();
     }
 
-    public void setCellValue(int row, int col, int value){
+    public void setCellValue(int row, int col, int value) throws IOException {
         if(!isValidValue(value)){
             return;
         }
         grid[row][col].setValue(value);
+        String message = id + " " + row + " " + col + " " + value;
+        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
     }
 
     public void printGrid() {

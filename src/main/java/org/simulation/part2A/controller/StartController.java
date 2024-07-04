@@ -6,6 +6,8 @@ import org.simulation.part2A.view.GridView;
 import org.simulation.part2A.view.StartView;
 
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 public class StartController {
 
@@ -32,7 +34,13 @@ public class StartController {
     class NewGameListener implements ActionListener {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {
-            user.createGrid();
+            try {
+                user.createGrid();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (TimeoutException ex) {
+                throw new RuntimeException(ex);
+            }
             GameDetailsView gameDetailsView = new GameDetailsView();
             new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
             startView.setVisible(false);

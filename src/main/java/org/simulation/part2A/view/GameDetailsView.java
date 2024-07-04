@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.IOException;
 import java.util.Optional;
 
 public class GameDetailsView extends JFrame {
@@ -66,7 +67,11 @@ public class GameDetailsView extends JFrame {
                     cellTextField.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            updateCellValue(grid, currentRow, currentCol, cellTextField);
+                            try {
+                                updateCellValue(grid, currentRow, currentCol, cellTextField);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
                     });
 
@@ -79,7 +84,11 @@ public class GameDetailsView extends JFrame {
 
                         @Override
                         public void focusLost(FocusEvent e) {
-                            updateCellValue(grid, currentRow, currentCol, cellTextField);
+                            try {
+                                updateCellValue(grid, currentRow, currentCol, cellTextField);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
                             cellTextField.setBackground(Color.WHITE);
                             cells[currentRow][currentCol].setIdUser(Optional.empty());
                         }
@@ -92,7 +101,7 @@ public class GameDetailsView extends JFrame {
         gamePanel.repaint();
     }
 
-    private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField){
+    private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField) throws IOException {
         try {
             if(cellTextField.getText().isEmpty()){
                 grid.setCellValue(row, col, 0);
