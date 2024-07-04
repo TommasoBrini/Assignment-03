@@ -28,12 +28,11 @@ public class Grid {
         return grid[row][col].getValue();
     }
 
-    public boolean setCellValue(int row, int col, int value){
+    public void setCellValue(int row, int col, int value){
         if(!isValidValue(value)){
-            return false;
+            return;
         }
         grid[row][col].setValue(value);
-        return true;
     }
 
     public void printGrid() {
@@ -43,7 +42,7 @@ public class Grid {
     }
 
     private boolean isValidValue(int value){
-        return value >= 1 && value <= 9;
+        return value >= 0 && value <= 9;
     }
 
     public int getId() {

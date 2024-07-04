@@ -4,8 +4,12 @@ import org.simulation.part2A.model.Cell;
 import org.simulation.part2A.model.Grid;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
@@ -37,12 +41,71 @@ public class GameDetailsView extends JFrame {
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                JButton cellButton = new JButton(String.valueOf(cells[row][col].getValue()));
-                cellButton.setEnabled(false); // Disable editing of buttons
-                gamePanel.add(cellButton);
+                final int currentRow = row; // final variables for inner class
+                final int currentCol = col; // final variables for inner class
+                JTextField cellTextField = new JTextField(cells[currentRow][currentCol].getValue() == 0 ? "" : String.valueOf(cells[currentRow][currentCol].getValue()));
+                cellTextField.setHorizontalAlignment(JTextField.CENTER); // Align text to the center
+                cellTextField.setPreferredSize(new Dimension(50, 50));
+
+                // Set border for 3x3 grid
+                int top = (currentRow % 3 == 0) ? 4 : 1;
+                int left = (currentCol % 3 == 0) ? 4 : 1;
+                int bottom = (currentRow == 8) ? 4 : 0;
+                int right = (currentCol == 8) ? 4 : 0;
+                cellTextField.setBorder(new MatteBorder(top, left, bottom, right, Color.BLACK));
+
+                if(cells[currentRow][currentCol].isInitialSet()) {
+                    cellTextField.setBackground(Color.LIGHT_GRAY);
+                    cellTextField.setEditable(false);
+                    cellTextField.setFocusable(false);
+                } else {
+                    cellTextField.setEditable(true);
+
+                    cellTextField.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            updateCellValue(grid, currentRow, currentCol, cellTextField);
+                        }
+                    });
+
+                    cellTextField.addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusGained(FocusEvent e) {
+                            cellTextField.;
+                        }
+
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                            updateCellValue(grid, currentRow, currentCol, cellTextField);
+                        }
+                    });
+                }
+                gamePanel.add(cellTextField);
             }
         }
         gamePanel.revalidate();
         gamePanel.repaint();
     }
+
+    private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField){
+        try {
+            if(cellTextField.getText().isEmpty()){
+                grid.setCellValue(row, col, 0);
+                return;
+            }
+            int newValue = Integer.parseInt(cellTextField.getText());
+            if (newValue >= 1 && newValue <= 9) {
+                grid.setCellValue(row, col, newValue); // Assuming a method like this exists
+            } else {
+                JOptionPane.showMessageDialog(this, "Please enter a number between 1 and 9.");
+                cellTextField.setText(""); // Clear the text field if input is invalid
+            }
+        } catch (NumberFormatException e) {
+            if (!cellTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Invalid input. Please enter a number between 1 and 9.");
+                cellTextField.setText(""); // Clear the text field if input is invalid
+            }
+        }
+    }
+
 }

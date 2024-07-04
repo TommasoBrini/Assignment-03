@@ -12,14 +12,23 @@ import java.util.concurrent.TimeoutException;
 public class Main {
     public static void main(String[] args) throws IOException, TimeoutException {
         User user = new User("1");
-        for(int i = 0; i < 10; i++){
+        /*for(int i = 0; i < 10; i++){
             user.createGrid();
-        }
-        user.getGrid(0).printGrid();
-        user.getGrid(4).printGrid();
+        }*/
         StartView view = new StartView();
         new StartController(view, user);
         view.setVisible(true);
+
+        /*
+        User user2 = new User("2");
+        StartView view2 = new StartView();
+        new StartController(view2, user2);
+        view2.setVisible(true);
+
+        User user3 = new User("3");
+        StartView view3 = new StartView();
+        new StartController(view3, user3);
+        view3.setVisible(true);*/
     }
 
 }
