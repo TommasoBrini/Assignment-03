@@ -10,16 +10,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class GameDetailsController {
-    private final User user;
     private final GameDetailsView gameDetailsView;
     private final StartView startView;
-    private final int selectedGrid;
 
     public GameDetailsController(User user, GameDetailsView gameDetailsView, StartView startView, int selectedGrid) {
-        this.user = user;
         this.gameDetailsView = gameDetailsView;
         this.startView = startView;
-        this.selectedGrid = selectedGrid;
         gameDetailsView.displayGrid(user.getGrid(selectedGrid), user);
         gameDetailsView.addBackButtonListener(new BackButtonListener());
     }

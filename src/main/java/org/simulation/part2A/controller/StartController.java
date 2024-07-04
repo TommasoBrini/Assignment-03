@@ -25,7 +25,7 @@ public class StartController {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {
             startView.setVisible(false);
-            GridView gridView = new GridView();
+            GridView gridView = new GridView(user.getId());
             new GridController(user, startView, gridView);
             gridView.setVisible(true);
         }
@@ -41,7 +41,7 @@ public class StartController {
             } catch (TimeoutException ex) {
                 throw new RuntimeException(ex);
             }
-            GameDetailsView gameDetailsView = new GameDetailsView();
+            GameDetailsView gameDetailsView = new GameDetailsView(user.getId());
             new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
             startView.setVisible(false);
             gameDetailsView.setVisible(true);

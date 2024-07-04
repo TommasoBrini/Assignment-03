@@ -18,8 +18,8 @@ public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
     private final JButton backButton;
 
-    public GameDetailsView() {
-        setTitle("Sudoku Grid Details");
+    public GameDetailsView(String title) {
+        setTitle("Player-" + title + " - Sudoku Grid Details");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());

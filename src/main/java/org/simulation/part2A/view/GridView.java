@@ -13,8 +13,8 @@ public class GridView extends JFrame {
     private final JPanel gridPanel;
     private final JButton backButton;
 
-    public GridView() {
-        setTitle("Sudoku Grids");
+    public GridView(String title) {
+        setTitle("Player-" + title + " - Sudoku Grids");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());

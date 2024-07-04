@@ -33,7 +33,7 @@ public class GridController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int gridIndex = Integer.parseInt(e.getActionCommand().split(" ")[1]) - 1;
-            detailsView = new GameDetailsView();
+            detailsView = new GameDetailsView(user.getId());
             new GameDetailsController(user, detailsView, startView, gridIndex);
             detailsView.setVisible(true);
             startView.setVisible(false);
