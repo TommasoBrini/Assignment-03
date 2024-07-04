@@ -14,20 +14,27 @@ public class Grid {
     private final int id;
     private final Cell[][] grid;
     private static final String EXCHANGE_NAME = "logs";
-    private final Channel channel;
+    //private final Channel channel;
 
     public Grid(int id, String userId) throws IOException, TimeoutException {
         this.id = id;
         this.grid = this.generateGrid(Utils.generateInitialGrid());
 
+        /*
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         channel = factory.newConnection().createChannel();
         channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
         channel.queueDeclare(id + ":" + userId, false, false, false, null);
-
+        */
         //channel.basicPublish(EXCHANGE_NAME, "", null, (id + " " + Utils.gridToString(grid)).getBytes());
     }
+
+    public Grid(int id, int[][] initialGrid) {
+        this.id = id;
+        this.grid = this.generateGrid(initialGrid);
+    }
+
 
     private Cell[][] generateGrid(int[][] initialGrid){
         Cell[][] grid = new Cell[9][9];
@@ -49,7 +56,7 @@ public class Grid {
         }
         grid[row][col].setValue(value);
         String message = id + " " + row + " " + col + " " + value;
-        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
+        //channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
     }
 
     public void printGrid() {

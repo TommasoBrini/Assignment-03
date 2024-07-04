@@ -5,6 +5,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
+import org.simulation.part2A.utils.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -27,6 +28,11 @@ public class User {
         channel = connection.createChannel();
 
         this.allGrids = new ArrayList<>();
+
+        String queueName = channel.queueDeclare().getQueue();
+        channel.queueBind(queueName, EXCHANGE_NAME, "");
+
+        channel.basicConsume(queueName, true, updateGridCallBack(), t -> {});
     }
 
     public String getId() {
@@ -41,18 +47,33 @@ public class User {
         int gridId = allGrids.size() + 1;
         Grid grid = new Grid(gridId, id);
         allGrids.add(grid);
+
+        publishGridUpdate(grid);
+
+        /*
         channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
         channel.queueBind(gridId + ":" + id, EXCHANGE_NAME, "");
 
+        channel.basicConsume(gridId + ":" + id, updateGridCallBack(), t -> {});*/
+    }
 
-        channel.basicConsume(gridId + ":" + id, updateGridCallBack(), t -> {});
+    public void publishGridUpdate(Grid grid) throws IOException {
+        String message = grid.getId() + " " + Utils.toString(grid.getGrid());
+        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
     }
 
     private DeliverCallback updateGridCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
-            String[] parts = message.split(" ");
+
+            Grid receivedGrid = Utils.fromString(message);
+
+            if (allGrids.stream().noneMatch(grid -> grid.getId() == (receivedGrid.getId()))) {
+                allGrids.add(receivedGrid);
+            }
+
+//            String[] parts = message.split(" ");
 //            int row = Integer.parseInt(parts[1]);
 //            int col = Integer.parseInt(parts[2]);
 //            int value = Integer.parseInt(parts[4]);

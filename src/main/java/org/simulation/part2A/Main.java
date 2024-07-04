@@ -15,17 +15,17 @@ public class Main {
         /*for(int i = 0; i < 10; i++){
             user.createGrid();
         }*/
-        StartView view = new StartView();
+        StartView view = new StartView(user.getId());
         new StartController(view, user);
         view.setVisible(true);
 
-        /*
+
         User user2 = new User("2");
-        StartView view2 = new StartView();
+        StartView view2 = new StartView(user2.getId());
         new StartController(view2, user2);
         view2.setVisible(true);
 
-        User user3 = new User("3");
+        /*User user3 = new User("3");
         StartView view3 = new StartView();
         new StartController(view3, user3);
         view3.setVisible(true);*/

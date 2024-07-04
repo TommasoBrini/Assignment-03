@@ -1,5 +1,8 @@
 package org.simulation.part2A.utils;
 
+import org.simulation.part2A.model.Cell;
+import org.simulation.part2A.model.Grid;
+
 import java.util.Random;
 
 public class Utils {
@@ -81,5 +84,29 @@ public class Utils {
             }
             grid[row][col] = 0;
         }
+    }
+
+    public static String toString(Cell[][] grid) {
+        StringBuilder sb = new StringBuilder();
+        for (Cell[] row : grid) {
+            for (Cell cell : row) {
+                sb.append(cell.getValue()).append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
+    public static Grid fromString(String message) {
+        String[] parts = message.split(" ");
+        int[][] grid = new int[9][9];
+        int index = 1;
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                grid[row][col] = Integer.parseInt(parts[index]);
+                index++;
+            }
+        }
+
+        return new Grid(Integer.parseInt(parts[0]), grid);
     }
 }
