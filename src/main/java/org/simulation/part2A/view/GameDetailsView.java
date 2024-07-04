@@ -2,6 +2,7 @@ package org.simulation.part2A.view;
 
 import org.simulation.part2A.model.Cell;
 import org.simulation.part2A.model.Grid;
+import org.simulation.part2A.model.User;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Optional;
 
 public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
@@ -36,7 +38,7 @@ public class GameDetailsView extends JFrame {
         backButton.addActionListener(listener);
     }
 
-    public void displayGrid(Grid grid){
+    public void displayGrid(Grid grid, User user) {
         gamePanel.removeAll();
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
@@ -71,12 +73,15 @@ public class GameDetailsView extends JFrame {
                     cellTextField.addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusGained(FocusEvent e) {
-                            cellTextField.;
+                            cells[currentRow][currentCol].setIdUser(Optional.of(user.getId()));
+                            cellTextField.setBackground(Color.YELLOW);
                         }
 
                         @Override
                         public void focusLost(FocusEvent e) {
                             updateCellValue(grid, currentRow, currentCol, cellTextField);
+                            cellTextField.setBackground(Color.WHITE);
+                            cells[currentRow][currentCol].setIdUser(Optional.empty());
                         }
                     });
                 }

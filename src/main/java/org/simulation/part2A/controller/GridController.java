@@ -33,10 +33,8 @@ public class GridController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int gridIndex = Integer.parseInt(e.getActionCommand().split(" ")[1]) - 1;
-            Grid selectedGrid = user.getGrid(gridIndex);
             detailsView = new GameDetailsView();
-            detailsView.displayGrid(selectedGrid);
-            detailsView.addBackButtonListener(new BackButtonListener());
+            new GameDetailsController(user, detailsView, startView, gridIndex);
             detailsView.setVisible(true);
             startView.setVisible(false);
             gridView.setVisible(false);

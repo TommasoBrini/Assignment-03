@@ -35,7 +35,7 @@ public class Cell {
         return idUser;
     }
 
-    public void setIdUser(String idUser){
-        this.idUser = Optional.of(idUser);
+    public void setIdUser(Optional<String> idUser){
+        this.idUser = idUser;
     }
 }

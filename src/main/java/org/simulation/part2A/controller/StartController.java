@@ -11,7 +11,6 @@ public class StartController {
 
     private final StartView startView;
     private final User user;
-    private GameDetailsView gameDetailsView;
 
     public StartController(StartView startView, User user) {
         this.startView = startView;
@@ -34,20 +33,12 @@ public class StartController {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {
             user.createGrid();
-            gameDetailsView = new GameDetailsView();
-            gameDetailsView.displayGrid(user.getGrid(user.getAllGrids().size() - 1));
-            gameDetailsView.addBackButtonListener(new BackButtonListener());
+            GameDetailsView gameDetailsView = new GameDetailsView();
+            new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
             startView.setVisible(false);
             gameDetailsView.setVisible(true);
         }
     }
 
-class BackButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-            gameDetailsView.setVisible(false);
-            startView.setVisible(true);
-        }
-    }
 
 }
