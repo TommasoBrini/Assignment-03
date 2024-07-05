@@ -3,6 +3,7 @@ package org.ass03.part2A.view;
 import org.ass03.part2A.model.Cell;
 import org.ass03.part2A.model.Grid;
 import org.ass03.part2A.model.User;
+import org.ass03.part2A.utils.Utils;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -85,18 +86,23 @@ public class GameDetailsView extends JFrame {
                         @Override
                         public void focusGained(FocusEvent e) {
                             cells[currentRow][currentCol].setIdUser(Optional.of(user.getId()));
-                            cellTextField.setBackground(Color.YELLOW);
+                            cellTextField.setBackground(Utils.getColorByName(user.getColor()));
+                            try {
+                                user.selectCell(grid.getId(), currentRow, currentCol);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
 
                         @Override
                         public void focusLost(FocusEvent e) {
+                            cellTextField.setBackground(Color.WHITE);
+                            cells[currentRow][currentCol].setIdUser(Optional.empty());
                             try {
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
-                            cellTextField.setBackground(Color.WHITE);
-                            cells[currentRow][currentCol].setIdUser(Optional.empty());
                         }
                     });
                 }
@@ -144,6 +150,11 @@ public class GameDetailsView extends JFrame {
                 }
             }
         }
+    }
+
+    public void colorCell(int row, int col, Color color){
+        cellTextFields[row][col].setBackground(color);
+        cellTextFields[row][col].setEditable(false);
     }
 
 }

@@ -4,6 +4,7 @@ import org.ass03.part2A.model.User;
 import org.ass03.part2A.view.GameDetailsView;
 import org.ass03.part2A.view.StartView;
 
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GameDetailsController implements GridUpdateListener{
@@ -28,6 +29,14 @@ public class GameDetailsController implements GridUpdateListener{
     @Override
     public void onGridUpdated(int gridIndex) {
         gameDetailsView.updateGrid(user.getGrid(gridIndex - 1));
+    }
+
+    @Override
+    public void onCellSelected(int gridId, int row, int col, Color color, String idUser) {
+        if(idUser.equals(user.getId())){
+            return;
+        }
+        gameDetailsView.colorCell(row, col, color);
     }
 
     class BackButtonListener implements ActionListener {

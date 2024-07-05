@@ -3,9 +3,24 @@ package org.ass03.part2A.utils;
 import org.ass03.part2A.model.Cell;
 import org.ass03.part2A.model.Grid;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Utils {
+
+    private static final Map<String, Color> colorMap = new HashMap<>();
+
+    static {
+        colorMap.put("red", Color.RED);
+        colorMap.put("green", Color.GREEN);
+        colorMap.put("yellow", Color.YELLOW);
+    }
+
+    public static Color getColorByName(String colorName) {
+        return colorMap.getOrDefault(colorName.toLowerCase(), Color.BLACK); // Default to black if not found
+    }
 
     // return a grid 9x9 filled with a valid Sudoku solution
     public static int[][] generateInitialGrid() {
@@ -109,4 +124,5 @@ public class Utils {
 
         return new Grid(Integer.parseInt(parts[0]), grid);
     }
+
 }

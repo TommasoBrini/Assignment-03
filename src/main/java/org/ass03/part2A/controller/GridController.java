@@ -5,6 +5,7 @@ import org.ass03.part2A.view.GameDetailsView;
 import org.ass03.part2A.view.GridView;
 import org.ass03.part2A.view.StartView;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,6 +35,11 @@ public class GridController implements GridUpdateListener {
 
     @Override
     public void onGridUpdated(int gridIndex) {
+
+    }
+
+    @Override
+    public void onCellSelected(int gridId, int row, int col, Color color, String idUser) {
 
     }
 

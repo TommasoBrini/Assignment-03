@@ -7,6 +7,8 @@ import com.rabbitmq.client.DeliverCallback;
 
 import org.ass03.part2A.controller.GridUpdateListener;
 import org.ass03.part2A.utils.Utils;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +21,20 @@ public class User {
     private Connection connection;
     private static final String EXCHANGE_CREATE = "create";
     private static final String EXCHANGE_UPDATE = "update";
+    private static final String EXCHANGE_SELECT = "select";
     private List<GridUpdateListener> listeners;
+    private final String color;
 
-    public User(String id) throws IOException, TimeoutException {
+    public User(String id, String color) throws IOException, TimeoutException {
         this.id = id;
+        this.color = color;
         this.setupConnection();
         this.allGrids = new ArrayList<>();
         this.listeners = new ArrayList<>();
 
         channel.exchangeDeclare(EXCHANGE_CREATE, "fanout");
         channel.exchangeDeclare(EXCHANGE_UPDATE, "fanout");
+        channel.exchangeDeclare(EXCHANGE_SELECT, "fanout");
 
         String queueName = channel.queueDeclare().getQueue();
         channel.queueBind(queueName, EXCHANGE_CREATE, "");
@@ -37,6 +43,14 @@ public class User {
         String updateQueueName = channel.queueDeclare().getQueue();
         channel.queueBind(updateQueueName, EXCHANGE_UPDATE, "");
         channel.basicConsume(updateQueueName, true, updateGridCallBack(), t -> {});
+
+        String selectQueueName = channel.queueDeclare().getQueue();
+        channel.queueBind(selectQueueName, EXCHANGE_SELECT, "");
+        channel.basicConsume(selectQueueName, true, selectCellCallBack(), t -> {});
+    }
+
+    public String getColor() {
+        return color;
     }
 
     void setupConnection() throws IOException, TimeoutException {
@@ -59,6 +73,12 @@ public class User {
     private void notifyGridUpdated(int gridId) {
         for (GridUpdateListener listener : listeners) {
             listener.onGridUpdated(gridId);
+        }
+    }
+
+    private void notifyCellSelected(int gridId, int row, int col, Color color, String idUser) {
+        for (GridUpdateListener listener : listeners) {
+            listener.onCellSelected(gridId, row, col, color, idUser);
         }
     }
 
@@ -89,6 +109,12 @@ public class User {
         String message = gridId + " " + row + " " + col + " " + value;
         ensureChannelIsOpen();
         channel.basicPublish(EXCHANGE_UPDATE, "", null, message.getBytes("UTF-8"));
+    }
+
+    public void selectCell(int gridId, int row, int col) throws IOException {
+        String message = gridId + " " + row + " " + col + " " + color + " " + id;
+        ensureChannelIsOpen();
+        channel.basicPublish(EXCHANGE_SELECT, "", null, message.getBytes("UTF-8"));
     }
 
     private void ensureChannelIsOpen() throws IOException {
@@ -132,6 +158,21 @@ public class User {
                 allGrids.add(receivedGrid);
                 notifyGridCreated();
             }
+        };
+    }
+
+    private DeliverCallback selectCellCallBack(){
+        return (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received select '" + message + "'");
+
+            String[] parts = message.split(" ");
+            int gridId = Integer.parseInt(parts[0]);
+            int row = Integer.parseInt(parts[1]);
+            int col = Integer.parseInt(parts[2]);
+            Color color = Utils.getColorByName(parts[3]);
+            String idUser = parts[4];
+            this.notifyCellSelected(gridId, row, col, color, idUser);
         };
     }
 
