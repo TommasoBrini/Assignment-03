@@ -8,7 +8,7 @@ import org.ass03.part2A.view.StartView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GridController {
+public class GridController implements GridUpdateListener {
     private final User user;
     private final GridView gridView;
     private final StartView startView;
@@ -18,12 +18,23 @@ public class GridController {
         this.user = user;
         this.gridView = gridView;
         this.startView = startView;
+        user.addGridUpdateListener(this);
         this.gridView.addBackButtonListener(new BackButtonListener());
         initView();
     }
 
     private void initView() {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
+    }
+
+    @Override
+    public void onGridCreated() {
+        gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
+    }
+
+    @Override
+    public void onGridUpdated(int gridIndex) {
+
     }
 
     class GridButtonListener implements ActionListener {

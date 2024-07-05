@@ -50,7 +50,7 @@ public class User {
         listeners.add(listener);
     }
 
-    private void notifyGridCreated(Grid grid) {
+    private void notifyGridCreated() {
         for (GridUpdateListener listener : listeners) {
             listener.onGridCreated();
         }
@@ -76,7 +76,7 @@ public class User {
         allGrids.add(grid);
 
         publishGrid(grid);
-        notifyGridCreated(grid);
+        notifyGridCreated();
     }
 
     public void publishGrid(Grid grid) throws IOException {
@@ -130,7 +130,7 @@ public class User {
 
             if (allGrids.stream().noneMatch(grid -> grid.getId() == (receivedGrid.getId()))) {
                 allGrids.add(receivedGrid);
-                notifyGridCreated(receivedGrid);
+                notifyGridCreated();
             }
         };
     }
