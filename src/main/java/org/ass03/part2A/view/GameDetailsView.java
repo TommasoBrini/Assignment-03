@@ -17,6 +17,7 @@ import java.util.Optional;
 public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
     private final JButton backButton;
+    private final JTextField[][] cellTextFields;
 
     public GameDetailsView(String title) {
         setTitle("Player-" + title + " - Sudoku Grid Details");
@@ -33,7 +34,10 @@ public class GameDetailsView extends JFrame {
         gamePanel = new JPanel();
         gamePanel.setLayout(new GridLayout(9, 9));
         add(gamePanel, BorderLayout.CENTER);
+
+        cellTextFields = new JTextField[9][9]; // Initialize the JTextField array
     }
+
 
     public void addBackButtonListener(ActionListener listener) {
         backButton.addActionListener(listener);
@@ -68,6 +72,7 @@ public class GameDetailsView extends JFrame {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
+
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                                 //user.updateGrid(grid.getId(), currentRow, currentCol, Integer.parseInt(cellTextField.getText()));
                             } catch (IOException ex) {
@@ -96,6 +101,7 @@ public class GameDetailsView extends JFrame {
                     });
                 }
                 gamePanel.add(cellTextField);
+                cellTextFields[row][col] = cellTextField;
             }
         }
         gamePanel.revalidate();
@@ -121,6 +127,21 @@ public class GameDetailsView extends JFrame {
             if (!cellTextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Invalid input. Please enter a number between 1 and 9.");
                 cellTextField.setText(""); // Clear the text field if input is invalid
+            }
+        }
+    }
+
+    public void updateGrid(Grid grid) {
+        System.out.println("Updating grid");
+        grid.printGrid();
+        Cell[][] cells = grid.getGrid();
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                JTextField cellTextField = cellTextFields[row][col];
+                if (cellTextField != null) {
+                    int cellValue = cells[row][col].getValue();
+                    cellTextField.setText(cellValue == 0 ? "" : String.valueOf(cellValue));
+                }
             }
         }
     }

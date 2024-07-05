@@ -11,20 +11,10 @@ public class Grid {
     private final int id;
     private final Cell[][] grid;
     private static final String EXCHANGE_NAME = "logs";
-    //private final Channel channel;
 
-    public Grid(int id, String userId) throws IOException, TimeoutException {
+    public Grid(int id) throws IOException, TimeoutException {
         this.id = id;
         this.grid = this.generateGrid(Utils.generateInitialGrid());
-
-        /*
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        channel = factory.newConnection().createChannel();
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-        channel.queueDeclare(id + ":" + userId, false, false, false, null);
-        */
-        //channel.basicPublish(EXCHANGE_NAME, "", null, (id + " " + Utils.gridToString(grid)).getBytes());
     }
 
     public Grid(int id, int[][] initialGrid) {

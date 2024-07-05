@@ -10,14 +10,11 @@ import java.util.concurrent.TimeoutException;
 
 public class Main {
     public static void main(String[] args) throws IOException, TimeoutException {
+
         User user = new User("1");
-        /*for(int i = 0; i < 10; i++){
-            user.createGrid();
-        }*/
         StartView view = new StartView(user.getId());
         new StartController(view, user);
         view.setVisible(true);
-
 
         User user2 = new User("2");
         StartView view2 = new StartView(user2.getId());
@@ -29,5 +26,4 @@ public class Main {
         new StartController(view3, user3);
         view3.setVisible(true);
     }
-
 }

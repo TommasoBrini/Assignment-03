@@ -14,7 +14,6 @@ public class GridController {
     private final StartView startView;
     private GameDetailsView detailsView;
 
-
     public GridController(User user, StartView startView, GridView gridView) {
         this.user = user;
         this.gridView = gridView;
