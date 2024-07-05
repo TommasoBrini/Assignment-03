@@ -144,7 +144,7 @@ public class User {
             }
         }
     }
-    
+
     private DeliverCallback updateGridCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");

@@ -5,7 +5,6 @@ import org.ass03.part2A.controller.StartController;
 import org.ass03.part2A.model.User;
 import org.ass03.part2A.view.StartView;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 

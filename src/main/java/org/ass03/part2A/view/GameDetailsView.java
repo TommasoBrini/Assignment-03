@@ -19,6 +19,7 @@ public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
     private final JButton backButton;
     private final JTextField[][] cellTextFields;
+    private final JButton submitButton;
 
     public GameDetailsView(String title) {
         setTitle("Player-" + title + " - Sudoku Grid Details");
@@ -36,12 +37,22 @@ public class GameDetailsView extends JFrame {
         gamePanel.setLayout(new GridLayout(9, 9));
         add(gamePanel, BorderLayout.CENTER);
 
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        submitButton = new JButton("Submit Simulation"); // Inizializza il pulsante
+        bottomPanel.add(submitButton);
+
+        add(bottomPanel, BorderLayout.SOUTH);
+
         cellTextFields = new JTextField[9][9]; // Initialize the JTextField array
     }
 
 
     public void addBackButtonListener(ActionListener listener) {
         backButton.addActionListener(listener);
+    }
+
+    public void addSubmitButtonListener(ActionListener listener) {
+        submitButton.addActionListener(listener);
     }
 
     public void displayGrid(Grid grid, User user) {
@@ -162,4 +173,7 @@ public class GameDetailsView extends JFrame {
         cellTextFields[row][col].setEditable(true);
     }
 
+    public void displayMessage(String s) {
+        JOptionPane.showMessageDialog(this, s);
+    }
 }

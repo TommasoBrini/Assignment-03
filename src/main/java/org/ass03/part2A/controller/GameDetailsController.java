@@ -1,6 +1,7 @@
 package org.ass03.part2A.controller;
 
 import org.ass03.part2A.model.User;
+import org.ass03.part2A.utils.Utils;
 import org.ass03.part2A.view.GameDetailsView;
 import org.ass03.part2A.view.StartView;
 
@@ -19,6 +20,7 @@ public class GameDetailsController implements GridUpdateListener{
         user.addGridUpdateListener(this);
         gameDetailsView.displayGrid(user.getGrid(selectedGrid), user);
         gameDetailsView.addBackButtonListener(new BackButtonListener());
+        gameDetailsView.addSubmitButtonListener(new SubmitButtonListener(selectedGrid));
     }
 
     @Override
@@ -52,5 +54,22 @@ public class GameDetailsController implements GridUpdateListener{
         }
     }
 
+    class SubmitButtonListener implements ActionListener {
+
+        private final int selectedGrid;
+
+        public SubmitButtonListener(int selectedGrid){
+            this.selectedGrid = selectedGrid;
+        }
+
+        @Override
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+            if(Utils.submit(user.getGrid(selectedGrid).getGrid())){
+                gameDetailsView.displayMessage("Congratulations! You have successfully completed the game.");
+            } else {
+                gameDetailsView.displayMessage("Sorry! You have not completed the game.");
+            }
+        }
+    }
 
 }

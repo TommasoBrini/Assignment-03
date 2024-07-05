@@ -125,4 +125,49 @@ public class Utils {
         return new Grid(Integer.parseInt(parts[0]), grid);
     }
 
+    public static boolean submit(Cell[][] grid) {
+        // Check if each row contains all numbers from 1 to 9
+        for (int row = 0; row < 9; row++) {
+            boolean[] rowCheck = new boolean[9];
+            for (int col = 0; col < 9; col++) {
+                int value = grid[row][col].getValue();
+                if (value < 1 || value > 9 || rowCheck[value - 1]) {
+                    return false; // Invalid number or duplicate in the row
+                }
+                rowCheck[value - 1] = true;
+            }
+        }
+
+        // Check if each column contains all numbers from 1 to 9
+        for (int col = 0; col < 9; col++) {
+            boolean[] colCheck = new boolean[9];
+            for (int row = 0; row < 9; row++) {
+                int value = grid[row][col].getValue();
+                if (value < 1 || value > 9 || colCheck[value - 1]) {
+                    return false; // Invalid number or duplicate in the column
+                }
+                colCheck[value - 1] = true;
+            }
+        }
+
+        // Check if each 3x3 sub-grid contains all numbers from 1 to 9
+        for (int boxRow = 0; boxRow < 3; boxRow++) {
+            for (int boxCol = 0; boxCol < 3; boxCol++) {
+                boolean[] boxCheck = new boolean[9];
+                for (int row = 0; row < 3; row++) {
+                    for (int col = 0; col < 3; col++) {
+                        int value = grid[boxRow * 3 + row][boxCol * 3 + col].getValue();
+                        if (value < 1 || value > 9 || boxCheck[value - 1]) {
+                            return false; // Invalid number or duplicate in the 3x3 sub-grid
+                        }
+                        boxCheck[value - 1] = true;
+                    }
+                }
+            }
+        }
+
+        return true;
+
+    }
+
 }
