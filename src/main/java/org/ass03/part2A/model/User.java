@@ -22,6 +22,7 @@ public class User {
     private static final String EXCHANGE_CREATE = "create";
     private static final String EXCHANGE_UPDATE = "update";
     private static final String EXCHANGE_SELECT = "select";
+    private static final String ECXHANGE_UNSELECT = "unselect";
     private List<GridUpdateListener> listeners;
     private final String color;
 
@@ -35,6 +36,7 @@ public class User {
         channel.exchangeDeclare(EXCHANGE_CREATE, "fanout");
         channel.exchangeDeclare(EXCHANGE_UPDATE, "fanout");
         channel.exchangeDeclare(EXCHANGE_SELECT, "fanout");
+        channel.exchangeDeclare(ECXHANGE_UNSELECT, "fanout");
 
         String queueName = channel.queueDeclare().getQueue();
         channel.queueBind(queueName, EXCHANGE_CREATE, "");
@@ -47,6 +49,10 @@ public class User {
         String selectQueueName = channel.queueDeclare().getQueue();
         channel.queueBind(selectQueueName, EXCHANGE_SELECT, "");
         channel.basicConsume(selectQueueName, true, selectCellCallBack(), t -> {});
+
+        String unselectQueueName = channel.queueDeclare().getQueue();
+        channel.queueBind(unselectQueueName, ECXHANGE_UNSELECT, "");
+        channel.basicConsume(unselectQueueName, true, unselectCellCallBack(), t -> {});
     }
 
     public String getColor() {
@@ -79,6 +85,12 @@ public class User {
     private void notifyCellSelected(int gridId, int row, int col, Color color, String idUser) {
         for (GridUpdateListener listener : listeners) {
             listener.onCellSelected(gridId, row, col, color, idUser);
+        }
+    }
+
+    private void notifyCellUnselect(int gridId, int row, int col){
+        for (GridUpdateListener listener : listeners) {
+            listener.onCellUnselected(gridId, row, col);
         }
     }
 
@@ -117,6 +129,12 @@ public class User {
         channel.basicPublish(EXCHANGE_SELECT, "", null, message.getBytes("UTF-8"));
     }
 
+    public void unselectCell(int gridId, int row, int col) throws IOException {
+        String message = gridId + " " + row + " " + col;
+        ensureChannelIsOpen();
+        channel.basicPublish(ECXHANGE_UNSELECT, "", null, message.getBytes("UTF-8"));
+    }
+
     private void ensureChannelIsOpen() throws IOException {
         if (channel == null || !channel.isOpen()) {
             try {
@@ -126,8 +144,7 @@ public class User {
             }
         }
     }
-
-
+    
     private DeliverCallback updateGridCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
@@ -173,6 +190,19 @@ public class User {
             Color color = Utils.getColorByName(parts[3]);
             String idUser = parts[4];
             this.notifyCellSelected(gridId, row, col, color, idUser);
+        };
+    }
+
+    private DeliverCallback unselectCellCallBack(){
+        return (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received unselect '" + message + "'");
+
+            String[] parts = message.split(" ");
+            int gridId = Integer.parseInt(parts[0]);
+            int row = Integer.parseInt(parts[1]);
+            int col = Integer.parseInt(parts[2]);
+            this.notifyCellUnselect(gridId, row, col);
         };
     }
 

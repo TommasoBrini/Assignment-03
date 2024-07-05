@@ -43,6 +43,11 @@ public class GridController implements GridUpdateListener {
 
     }
 
+    @Override
+    public void onCellUnselected(int gridId, int row, int col) {
+
+    }
+
     class GridButtonListener implements ActionListener {
 
         @Override

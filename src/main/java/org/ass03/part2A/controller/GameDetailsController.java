@@ -39,6 +39,11 @@ public class GameDetailsController implements GridUpdateListener{
         gameDetailsView.colorCell(row, col, color);
     }
 
+    @Override
+    public void onCellUnselected(int gridId, int row, int col) {
+        gameDetailsView.uncolorCell(row, col);
+    }
+
     class BackButtonListener implements ActionListener {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {

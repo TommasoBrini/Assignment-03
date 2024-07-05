@@ -100,6 +100,7 @@ public class GameDetailsView extends JFrame {
                             cells[currentRow][currentCol].setIdUser(Optional.empty());
                             try {
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
+                                user.unselectCell(grid.getId(), currentRow, currentCol);
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -138,7 +139,6 @@ public class GameDetailsView extends JFrame {
     }
 
     public void updateGrid(Grid grid) {
-        System.out.println("Updating grid");
         grid.printGrid();
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
@@ -155,6 +155,11 @@ public class GameDetailsView extends JFrame {
     public void colorCell(int row, int col, Color color){
         cellTextFields[row][col].setBackground(color);
         cellTextFields[row][col].setEditable(false);
+    }
+
+    public void uncolorCell(int row, int col){
+        cellTextFields[row][col].setBackground(Color.WHITE);
+        cellTextFields[row][col].setEditable(true);
     }
 
 }
