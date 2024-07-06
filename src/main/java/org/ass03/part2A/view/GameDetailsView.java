@@ -172,7 +172,6 @@ public class GameDetailsView extends JFrame {
     }
 
     public void displayMessage(String s) {
-        System.out.println(s);
         JOptionPane.showMessageDialog(this, s);
     }
 }
