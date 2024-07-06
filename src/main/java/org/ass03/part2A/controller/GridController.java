@@ -50,7 +50,7 @@ public class GridController implements GridUpdateListener {
 
     @Override
     public void onGridCompleted(int gridId, String userId) {
-
+        gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
     class GridButtonListener implements ActionListener {
