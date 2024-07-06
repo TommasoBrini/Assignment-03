@@ -16,6 +16,8 @@ public class Main {
         new StartController(view, user);
         view.setVisible(true);
 
+        ;
+
         User user2 = new User("2", "green");
         StartView view2 = new StartView(user2.getId());
         new StartController(view2, user2);

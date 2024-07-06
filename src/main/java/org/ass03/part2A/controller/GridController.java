@@ -48,6 +48,11 @@ public class GridController implements GridUpdateListener {
 
     }
 
+    @Override
+    public void onGridCompleted(int gridId, String userId) {
+
+    }
+
     class GridButtonListener implements ActionListener {
 
         @Override
