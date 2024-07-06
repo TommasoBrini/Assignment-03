@@ -84,9 +84,7 @@ public class GameDetailsView extends JFrame {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
-                                //user.updateGrid(grid.getId(), currentRow, currentCol, Integer.parseInt(cellTextField.getText()));
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -174,6 +172,7 @@ public class GameDetailsView extends JFrame {
     }
 
     public void displayMessage(String s) {
+        System.out.println(s);
         JOptionPane.showMessageDialog(this, s);
     }
 }

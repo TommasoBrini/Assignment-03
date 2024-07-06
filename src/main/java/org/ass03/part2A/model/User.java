@@ -23,6 +23,7 @@ public class User {
     private static final String EXCHANGE_UPDATE = "update";
     private static final String EXCHANGE_SELECT = "select";
     private static final String ECXHANGE_UNSELECT = "unselect";
+    private static final String EXCHANGE_SUBMIT = "submit";
     private List<GridUpdateListener> listeners;
     private final String color;
 
@@ -37,6 +38,7 @@ public class User {
         channel.exchangeDeclare(EXCHANGE_UPDATE, "fanout");
         channel.exchangeDeclare(EXCHANGE_SELECT, "fanout");
         channel.exchangeDeclare(ECXHANGE_UNSELECT, "fanout");
+        channel.exchangeDeclare(EXCHANGE_SUBMIT, "fanout");
 
         String queueName = channel.queueDeclare().getQueue();
         channel.queueBind(queueName, EXCHANGE_CREATE, "");
@@ -53,6 +55,10 @@ public class User {
         String unselectQueueName = channel.queueDeclare().getQueue();
         channel.queueBind(unselectQueueName, ECXHANGE_UNSELECT, "");
         channel.basicConsume(unselectQueueName, true, unselectCellCallBack(), t -> {});
+
+        String submitQueueName = channel.queueDeclare().getQueue();
+        channel.queueBind(submitQueueName, EXCHANGE_SUBMIT, "");
+        channel.basicConsume(submitQueueName, true, submitGridCallBack(), t -> {});
     }
 
     public String getColor() {
@@ -91,6 +97,12 @@ public class User {
     private void notifyCellUnselect(int gridId, int row, int col){
         for (GridUpdateListener listener : listeners) {
             listener.onCellUnselected(gridId, row, col);
+        }
+    }
+
+    private void notifyGridCompleted(int gridId, String userId) {
+        for (GridUpdateListener listener : listeners) {
+            listener.onGridCompleted(gridId, userId);
         }
     }
 
@@ -133,6 +145,12 @@ public class User {
         String message = gridId + " " + row + " " + col;
         ensureChannelIsOpen();
         channel.basicPublish(ECXHANGE_UNSELECT, "", null, message.getBytes("UTF-8"));
+    }
+
+    public void submitGrid(int gridId) throws IOException {
+        String message = gridId + " " + id;
+        ensureChannelIsOpen();
+        channel.basicPublish(EXCHANGE_SUBMIT, "", null, message.getBytes("UTF-8"));
     }
 
     private void ensureChannelIsOpen() throws IOException {
@@ -203,6 +221,19 @@ public class User {
             int row = Integer.parseInt(parts[1]);
             int col = Integer.parseInt(parts[2]);
             this.notifyCellUnselect(gridId, row, col);
+        };
+    }
+
+    private DeliverCallback submitGridCallBack(){
+        return (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            System.out.println(" [x] Received submit '" + message + "'");
+
+            String[] parts = message.split(" ");
+            int gridId = Integer.parseInt(parts[0]);
+            String userId = parts[1];
+            allGrids.get(gridId).setCompleted();
+            notifyGridCompleted(gridId, userId);
         };
     }
 

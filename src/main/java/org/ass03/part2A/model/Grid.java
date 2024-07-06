@@ -10,7 +10,7 @@ public class Grid {
 
     private final int id;
     private final Cell[][] grid;
-    private static final String EXCHANGE_NAME = "logs";
+    private boolean completed = false;
 
     public Grid(int id) throws IOException, TimeoutException {
         this.id = id;
@@ -41,8 +41,6 @@ public class Grid {
             return;
         }
         grid[row][col].setValue(value);
-        //String message = id + " " + row + " " + col + " " + value;
-        //channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
     }
 
     public void printGrid() {
@@ -61,5 +59,13 @@ public class Grid {
 
     public Cell[][] getGrid() {
         return grid;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted() {
+        this.completed = true;
     }
 }

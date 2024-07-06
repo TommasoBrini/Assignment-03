@@ -40,7 +40,6 @@ public class GridView extends JFrame {
             JButton gridButton = new JButton("Grid " + (i + 1));
             gridButton.setPreferredSize(new Dimension(200, 100)); // Fixed size for each button
             gridButton.addActionListener(listener);
-
             gridPanel.add(gridButton);
         }
         gridPanel.revalidate();
