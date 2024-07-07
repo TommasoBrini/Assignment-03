@@ -8,10 +8,7 @@ import org.ass03.part2A.utils.Utils;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -26,7 +23,7 @@ public class GameDetailsView extends JFrame {
     public GameDetailsView(String title) {
         setTitle("Player-" + title + " - Sudoku Grid Details");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -58,9 +55,22 @@ public class GameDetailsView extends JFrame {
     }
 
     public void displayGrid(Grid grid, User user) {
-        this.myColor = Utils.getColorByName(user.getColor());
         this.gridId = grid.getId();
+        this.myColor = Utils.getColorByName(user.getColor());
         this.gamePanel.removeAll();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    user.unselectCell(gridId, -1, -1);
+                } catch (IOException ex){
+                    ex.printStackTrace();
+                }
+                dispose();
+            }
+        });
+
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -81,6 +91,9 @@ public class GameDetailsView extends JFrame {
                     cellTextField.setBackground(Color.LIGHT_GRAY);
                     cellTextField.setEditable(false);
                     cellTextField.setFocusable(false);
+                } else if(grid.isCompleted()){
+                    cellTextField.setFocusable(false);
+                    cellTextField.setEditable(false);
                 } else {
                     cellTextField.setEditable(true);
 
@@ -98,7 +111,6 @@ public class GameDetailsView extends JFrame {
                     cellTextField.addFocusListener(new FocusAdapter() {
                         @Override
                         public void focusGained(FocusEvent e) {
-                            cells[currentRow][currentCol].setIdUser(Optional.of(user.getId()));
                             try {
                                 user.selectCell(grid.getId(), currentRow, currentCol);
                             } catch (IOException ex) {
@@ -108,7 +120,6 @@ public class GameDetailsView extends JFrame {
 
                         @Override
                         public void focusLost(FocusEvent e) {
-                            cells[currentRow][currentCol].setIdUser(Optional.empty());
                             try {
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                                 user.unselectCell(grid.getId(), currentRow, currentCol);
@@ -127,13 +138,11 @@ public class GameDetailsView extends JFrame {
     private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField, User user) throws IOException {
         try {
             if(cellTextField.getText().isEmpty()){
-                grid.setCellValue(row, col, 0);
                 user.updateGrid(grid.getId(), row, col, Integer.parseInt(cellTextField.getText()));
                 return;
             }
             int newValue = Integer.parseInt(cellTextField.getText());
             if (newValue >= 1 && newValue <= 9) {
-                grid.setCellValue(row, col, newValue); // Assuming a method like this exists
                 user.updateGrid(grid.getId(), row, col, Integer.parseInt(cellTextField.getText()));
             } else {
                 JOptionPane.showMessageDialog(this, "Please enter a number between 1 and 9.");
@@ -154,6 +163,10 @@ public class GameDetailsView extends JFrame {
             for (int col = 0; col < 9; col++) {
                 JTextField cellTextField = cellTextFields[row][col];
                 if (cellTextField != null) {
+                    if(grid.isCompleted()){
+                        cellTextField.setFocusable(false);
+                        cellTextField.setEditable(false);
+                    }
                     int cellValue = cells[row][col].getValue();
                     cellTextField.setText(cellValue == 0 ? "" : String.valueOf(cellValue));
                 }

@@ -71,6 +71,7 @@ public class GameDetailsController implements GridUpdateListener{
             if (Utils.submit(user.getGrid(selectedGrid).getGrid())) {
                 try {
                     user.submitGrid(selectedGrid);
+                    gameDetailsView.updateGrid(user.getGrid(selectedGrid));
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

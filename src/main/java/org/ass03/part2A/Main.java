@@ -11,6 +11,7 @@ import java.util.concurrent.TimeoutException;
 public class Main {
     public static void main(String[] args) throws IOException, TimeoutException {
 
+
         User user = new User("1", "yellow");
         StartView view = new StartView(user.getId());
         new StartController(view, user);

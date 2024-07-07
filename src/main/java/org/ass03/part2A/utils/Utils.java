@@ -89,7 +89,7 @@ public class Utils {
 
     private static void removeNumbers(int[][] grid) {
         Random random = new Random();
-        int cellsToRemove = (int) (81 * 0.2);
+        int cellsToRemove = (int) (81 * 0.05);
         for (int i = 0; i < cellsToRemove; i++) {
             int row = random.nextInt(9);
             int col = random.nextInt(9);
