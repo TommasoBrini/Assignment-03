@@ -20,6 +20,8 @@ public class GameDetailsView extends JFrame {
     private final JButton backButton;
     private final JTextField[][] cellTextFields;
     private final JButton submitButton;
+    private Color myColor;
+    private int gridId;
 
     public GameDetailsView(String title) {
         setTitle("Player-" + title + " - Sudoku Grid Details");
@@ -56,7 +58,9 @@ public class GameDetailsView extends JFrame {
     }
 
     public void displayGrid(Grid grid, User user) {
-        gamePanel.removeAll();
+        this.myColor = Utils.getColorByName(user.getColor());
+        this.gridId = grid.getId();
+        this.gamePanel.removeAll();
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -95,7 +99,6 @@ public class GameDetailsView extends JFrame {
                         @Override
                         public void focusGained(FocusEvent e) {
                             cells[currentRow][currentCol].setIdUser(Optional.of(user.getId()));
-                            cellTextField.setBackground(Utils.getColorByName(user.getColor()));
                             try {
                                 user.selectCell(grid.getId(), currentRow, currentCol);
                             } catch (IOException ex) {
@@ -105,7 +108,6 @@ public class GameDetailsView extends JFrame {
 
                         @Override
                         public void focusLost(FocusEvent e) {
-                            cellTextField.setBackground(Color.WHITE);
                             cells[currentRow][currentCol].setIdUser(Optional.empty());
                             try {
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
@@ -120,8 +122,6 @@ public class GameDetailsView extends JFrame {
                 cellTextFields[row][col] = cellTextField;
             }
         }
-        gamePanel.revalidate();
-        gamePanel.repaint();
     }
 
     private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField, User user) throws IOException {
@@ -161,9 +161,11 @@ public class GameDetailsView extends JFrame {
         }
     }
 
-    public void colorCell(int row, int col, Color color){
-        cellTextFields[row][col].setBackground(color);
-        cellTextFields[row][col].setEditable(false);
+    public void colorCell(int gridId, int row, int col, Color color){
+        if(this.gridId == gridId){
+            cellTextFields[row][col].setBackground(color);
+            cellTextFields[row][col].setEditable(myColor.equals(color));
+        }
     }
 
     public void uncolorCell(int row, int col){

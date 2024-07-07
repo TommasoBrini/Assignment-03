@@ -38,10 +38,7 @@ public class GameDetailsController implements GridUpdateListener{
 
     @Override
     public void onCellSelected(int gridId, int row, int col, Color color, String userId) {
-        if(userId.equals(user.getId())){
-            return;
-        }
-        gameDetailsView.colorCell(row, col, color);
+        gameDetailsView.colorCell(gridId, row, col, color);
     }
 
     @Override
@@ -79,7 +76,7 @@ public class GameDetailsController implements GridUpdateListener{
                 }
                 gameDetailsView.displayMessage("Congratulations! You have successfully completed the game.");
             } else {
-                gameDetailsView.displayMessage("Sorry! You have not completed the game.");
+                gameDetailsView.displayMessage("Sorry, the solution is not correct. Please try again.");
             }
         }
     }
