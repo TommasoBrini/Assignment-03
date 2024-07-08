@@ -1,11 +1,7 @@
 package org.ass03.part1.run;
 
-<<<<<<< HEAD:src/main/java/org/ass03/part1/run/RunTrafficSimulation.java
 import org.ass03.part1.concreteSimulation.*;
-=======
-import org.simulation.part1.concreteSimulation.*;
 import org.ass03.part1.controller.Controller;
->>>>>>> dev:src/main/java/org/simulation/part1/run/RunTrafficSimulation.java
 
 /**
  * 
