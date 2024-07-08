@@ -4,7 +4,7 @@ package org.ass03.part1.run;
 import org.ass03.part1.concreteSimulation.*;
 =======
 import org.simulation.part1.concreteSimulation.*;
-import org.simulation.part1.controller.Controller;
+import org.ass03.part1.controller.Controller;
 >>>>>>> dev:src/main/java/org/simulation/part1/run/RunTrafficSimulation.java
 
 /**

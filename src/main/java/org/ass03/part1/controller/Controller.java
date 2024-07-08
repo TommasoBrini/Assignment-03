@@ -1,6 +1,5 @@
-package org.simulation.part1.controller;
+package org.ass03.part1.controller;
 
-import akka.actor.ActorSystem;
 import org.simulation.part1.concreteSimulation.RoadSimStatistics;
 import org.simulation.part1.concreteSimulation.RoadSimView;
 import org.simulation.part1.environment.AbstractSimulation;
