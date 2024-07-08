@@ -1,7 +1,7 @@
 package org.ass03.part1.run;
 
 import org.ass03.part1.concreteSimulation.*;
-import org.ass03.part1.controller.Controller;
+import org.ass03.part1.controller.SimViewController;
 
 /**
  * 
@@ -18,6 +18,6 @@ public class RunTrafficSimulation {
 		//var simulation = new TrafficSimulationSingleRoadWithTrafficLightTwoCars();
 
 		simulation.setup();
-		Controller controller = new Controller(simulation, new RoadSimView());
+		SimViewController controller = new SimViewController(simulation, new RoadSimView());
 	}
 }

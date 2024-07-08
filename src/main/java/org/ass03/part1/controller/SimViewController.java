@@ -10,12 +10,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Controller {
+public class SimViewController {
 
     private final AbstractSimulation simulation;
     private final RoadSimView view;
 
-    public Controller(AbstractSimulation simulation, RoadSimView view) {
+    public SimViewController(AbstractSimulation simulation, RoadSimView view) {
         this.simulation = simulation;
         this.view = view;
 
