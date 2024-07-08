@@ -10,7 +10,6 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Optional;
 
 public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
@@ -19,6 +18,8 @@ public class GameDetailsView extends JFrame {
     private final JButton submitButton;
     private Color myColor;
     private int gridId;
+    private int currentSelectedRow = 0;
+    private int currentSelectedCol = 0;
 
     public GameDetailsView(String title) {
         setTitle("Player-" + title + " - Sudoku Grid Details");
@@ -37,7 +38,7 @@ public class GameDetailsView extends JFrame {
         add(gamePanel, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        submitButton = new JButton("Submit Simulation"); // Inizializza il pulsante
+        submitButton = new JButton("Submit Simulation");
         bottomPanel.add(submitButton);
 
         add(bottomPanel, BorderLayout.SOUTH);
@@ -63,9 +64,9 @@ public class GameDetailsView extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 try {
-                    user.unselectCell(gridId, -1, -1);
-                } catch (IOException ex){
-                    ex.printStackTrace();
+                    user.unselectCell(gridId, currentSelectedRow, currentSelectedCol);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
                 dispose();
             }
@@ -97,14 +98,11 @@ public class GameDetailsView extends JFrame {
                 } else {
                     cellTextField.setEditable(true);
 
-                    cellTextField.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            try {
-                                updateCellValue(grid, currentRow, currentCol, cellTextField, user);
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
+                    cellTextField.addActionListener(e -> {
+                        try {
+                            updateCellValue(grid, currentRow, currentCol, cellTextField, user);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
                         }
                     });
 
@@ -113,6 +111,8 @@ public class GameDetailsView extends JFrame {
                         public void focusGained(FocusEvent e) {
                             try {
                                 user.selectCell(grid.getId(), currentRow, currentCol);
+                                currentSelectedRow = currentRow;
+                                currentSelectedCol = currentCol;
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -181,7 +181,7 @@ public class GameDetailsView extends JFrame {
         }
     }
 
-    public void uncolorCell(int row, int col){
+    public void uncoloredCell(int row, int col){
         cellTextFields[row][col].setBackground(Color.WHITE);
         cellTextFields[row][col].setEditable(true);
     }

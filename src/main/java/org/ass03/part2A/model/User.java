@@ -10,34 +10,35 @@ import org.ass03.part2A.utils.Utils;
 
 import java.awt.*;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class User {
     private final String id;
-    private List<Grid> allGrids;
+    private final List<Grid> allGrids;
     private Channel channel;
-    private Connection connection;
     private static final String EXCHANGE_CREATE = "create";
     private static final String EXCHANGE_UPDATE = "update";
     private static final String EXCHANGE_SELECT = "select";
-    private static final String ECXHANGE_UNSELECT = "unselect";
+    private static final String EXCHANGE_UNSELECT = "unselect";
     private static final String EXCHANGE_SUBMIT = "submit";
-    private List<GridUpdateListener> listeners;
+    private final List<GridUpdateListener> listeners;
     private final String color;
 
     public User(String id, String color) throws IOException, TimeoutException {
         this.id = id;
         this.color = color;
-        this.setupConnection();
         this.allGrids = new ArrayList<>();
         this.listeners = new ArrayList<>();
+
+        this.setupConnection();
 
         channel.exchangeDeclare(EXCHANGE_CREATE, "fanout");
         channel.exchangeDeclare(EXCHANGE_UPDATE, "fanout");
         channel.exchangeDeclare(EXCHANGE_SELECT, "fanout");
-        channel.exchangeDeclare(ECXHANGE_UNSELECT, "fanout");
+        channel.exchangeDeclare(EXCHANGE_UNSELECT, "fanout");
         channel.exchangeDeclare(EXCHANGE_SUBMIT, "fanout");
 
         String queueName = channel.queueDeclare().getQueue();
@@ -53,7 +54,7 @@ public class User {
         channel.basicConsume(selectQueueName, true, selectCellCallBack(), t -> {});
 
         String unselectQueueName = channel.queueDeclare().getQueue();
-        channel.queueBind(unselectQueueName, ECXHANGE_UNSELECT, "");
+        channel.queueBind(unselectQueueName, EXCHANGE_UNSELECT, "");
         channel.basicConsume(unselectQueueName, true, unselectCellCallBack(), t -> {});
 
         String submitQueueName = channel.queueDeclare().getQueue();
@@ -68,7 +69,7 @@ public class User {
     void setupConnection() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
-        this.connection = factory.newConnection();
+        Connection connection = factory.newConnection();
         this.channel = connection.createChannel();
     }
 
@@ -126,31 +127,31 @@ public class User {
     public void publishGrid(Grid grid) throws IOException {
         String message = grid.getId() + " " + Utils.toString(grid.getGrid());
         ensureChannelIsOpen();
-        channel.basicPublish(EXCHANGE_CREATE, "", null, message.getBytes("UTF-8"));
+        channel.basicPublish(EXCHANGE_CREATE, "", null, message.getBytes(StandardCharsets.UTF_8));
     }
 
     public void updateGrid(int gridId, int row, int col, int value) throws IOException {
         String message = gridId + " " + row + " " + col + " " + value;
         ensureChannelIsOpen();
-        channel.basicPublish(EXCHANGE_UPDATE, "", null, message.getBytes("UTF-8"));
+        channel.basicPublish(EXCHANGE_UPDATE, "", null, message.getBytes(StandardCharsets.UTF_8));
     }
 
     public void selectCell(int gridId, int row, int col) throws IOException {
         String message = gridId + " " + row + " " + col + " " + color + " " + id;
         ensureChannelIsOpen();
-        channel.basicPublish(EXCHANGE_SELECT, "", null, message.getBytes("UTF-8"));
+        channel.basicPublish(EXCHANGE_SELECT, "", null, message.getBytes(StandardCharsets.UTF_8));
     }
 
     public void unselectCell(int gridId, int row, int col) throws IOException {
         String message = gridId + " " + row + " " + col;
         ensureChannelIsOpen();
-        channel.basicPublish(ECXHANGE_UNSELECT, "", null, message.getBytes("UTF-8"));
+        channel.basicPublish(EXCHANGE_UNSELECT, "", null, message.getBytes(StandardCharsets.UTF_8));
     }
 
     public void submitGrid(int gridId) throws IOException {
         String message = gridId + " " + id;
         ensureChannelIsOpen();
-        channel.basicPublish(EXCHANGE_SUBMIT, "", null, message.getBytes("UTF-8"));
+        channel.basicPublish(EXCHANGE_SUBMIT, "", null, message.getBytes(StandardCharsets.UTF_8));
     }
 
     private void ensureChannelIsOpen() throws IOException {
@@ -165,7 +166,7 @@ public class User {
 
     private DeliverCallback updateGridCallBack(){
         return (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received update '" + message + "'");
 
             String[] parts = message.split(" ");
@@ -176,15 +177,15 @@ public class User {
             try {
                 allGrids.get(gridId - 1).setCellValue(row, col, value);
                 notifyGridUpdated(gridId);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Grid not found");
             }
         };
     }
 
     private DeliverCallback addGridCallBack(){
         return (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received create '" + message + "'");
 
             Grid receivedGrid = Utils.fromString(message);
@@ -198,7 +199,7 @@ public class User {
 
     private DeliverCallback selectCellCallBack(){
         return (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received select '" + message + "'");
 
             String[] parts = message.split(" ");
@@ -213,20 +214,25 @@ public class User {
 
     private DeliverCallback unselectCellCallBack(){
         return (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received unselect '" + message + "'");
 
             String[] parts = message.split(" ");
             int gridId = Integer.parseInt(parts[0]);
             int row = Integer.parseInt(parts[1]);
             int col = Integer.parseInt(parts[2]);
+            if (row == -1 && col == -1){
+                this.notifyGridCompleted(gridId, parts[3]);
+            } else {
+                this.notifyCellUnselect(gridId, row, col);
+            }
             this.notifyCellUnselect(gridId, row, col);
         };
     }
 
     private DeliverCallback submitGridCallBack(){
         return (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.println(" [x] Received submit '" + message + "'");
 
             String[] parts = message.split(" ");

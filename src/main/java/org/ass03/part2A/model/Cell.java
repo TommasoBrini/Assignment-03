@@ -1,22 +1,13 @@
 package org.ass03.part2A.model;
 
-import java.util.Optional;
-
 public class Cell {
 
     private int value;
-    // TODO da gestire idUser
-    private Optional<String> idUser;
     private final boolean initialSet;
 
     public Cell(int value){
         this.value = value;
-        if (this.value != 0) {
-            this.initialSet = true;
-        } else {
-            this.initialSet = false;
-        }
-        this.idUser = Optional.empty();
+        this.initialSet = this.value != 0;
     }
 
     public int getValue(){
@@ -29,13 +20,5 @@ public class Cell {
 
     public boolean isInitialSet(){
         return initialSet;
-    }
-
-    public Optional<String> getIdUser(){
-        return idUser;
-    }
-
-    public void setIdUser(Optional<String> idUser){
-        this.idUser = idUser;
     }
 }

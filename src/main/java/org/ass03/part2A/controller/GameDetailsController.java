@@ -43,7 +43,7 @@ public class GameDetailsController implements GridUpdateListener{
 
     @Override
     public void onCellUnselected(int gridId, int row, int col) {
-        gameDetailsView.uncolorCell(row, col);
+        gameDetailsView.uncoloredCell(row, col);
     }
 
     @Override

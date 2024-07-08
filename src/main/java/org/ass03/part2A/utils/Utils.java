@@ -30,25 +30,24 @@ public class Utils {
         return grid;
     }
 
-    private static boolean fillGrid(int[][] grid) {
-        Random random = new Random();
-        return fillCell(grid, 0, 0, random);
+    private static void fillGrid(int[][] grid) {
+        fillCell(grid, 0, 0);
     }
 
-    private static boolean fillCell(int[][] grid, int row, int col, Random random) {
+    private static boolean fillCell(int[][] grid, int row, int col) {
         if (row == 9) {
             return true;
         }
         int nextRow = (col == 8) ? row + 1 : row;
         int nextCol = (col + 1) % 9;
         if (grid[row][col] != 0) {
-            return fillCell(grid, nextRow, nextCol, random);
+            return fillCell(grid, nextRow, nextCol);
         }
         int[] numbers = generateRandomOrder();
         for (int num : numbers) {
             if (isValid(grid, row, col, num)) {
                 grid[row][col] = num;
-                if (fillCell(grid, nextRow, nextCol, random)) {
+                if (fillCell(grid, nextRow, nextCol)) {
                     return true;
                 }
                 grid[row][col] = 0;

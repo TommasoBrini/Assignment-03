@@ -2,9 +2,7 @@ package org.ass03.part2A.model;
 
 import org.ass03.part2A.utils.Utils;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.TimeoutException;
 
 public class Grid {
 
@@ -12,7 +10,7 @@ public class Grid {
     private final Cell[][] grid;
     private boolean completed = false;
 
-    public Grid(int id) throws IOException, TimeoutException {
+    public Grid(int id) {
         this.id = id;
         this.grid = this.generateGrid(Utils.generateInitialGrid());
     }
@@ -32,11 +30,7 @@ public class Grid {
         return grid;
     }
 
-    public int getCellValue(int row, int col){
-        return grid[row][col].getValue();
-    }
-
-    public void setCellValue(int row, int col, int value) throws IOException {
+    public void setCellValue(int row, int col, int value) {
         if(!isValidValue(value)){
             return;
         }
