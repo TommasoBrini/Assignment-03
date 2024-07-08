@@ -122,4 +122,12 @@ public abstract class AbstractSimulation {
     public void shutdown() {
         system.terminate();
     }
+
+    public void pause() {
+        system.actorSelection("/user/gui").tell(new Message("pause", List.of()), ActorRef.noSender());
+    }
+
+    public void resume() {
+        system.actorSelection("/user/gui").tell(new Message("resume", List.of(dt, system)), ActorRef.noSender());
+    }
 }

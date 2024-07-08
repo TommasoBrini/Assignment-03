@@ -23,12 +23,14 @@ public class GUIActor extends AbstractActor {
     private long averageTimePerStep;
     private long timePerStep;
     private int nSteps;
+    private boolean isPaused;
 
     public GUIActor(){
         super();
         this.listeners = new ArrayList<>();
         this.toBeInSyncWithWallTime = false;
         this.timePerStep = 0;
+        this.isPaused = false;
     }
 
     private void addSimulationListener(SimulationListener listener){
@@ -56,14 +58,16 @@ public class GUIActor extends AbstractActor {
     }
 
     private void notifyNewStep(int t, ActorSystem system){
-        timePerStep += System.currentTimeMillis() - currentWallTime;
-        if (toBeInSyncWithWallTime) {
-            syncWithWallTime();
+        if (!isPaused) {
+            timePerStep += System.currentTimeMillis() - currentWallTime;
+            if (toBeInSyncWithWallTime) {
+                syncWithWallTime();
+            }
+            for (var l: listeners) {
+                l.notifyStepDone(t, system);
+            }
+            getContext().actorSelection("/user/env").tell(new Message("step", List.of(t)), ActorRef.noSender());
         }
-        for (var l: listeners) {
-            l.notifyStepDone(t, system);
-        }
-        getContext().actorSelection("/user/env").tell(new Message("step", List.of(t)), ActorRef.noSender());
     }
 
     private void syncWithWallTime() {
@@ -86,6 +90,11 @@ public class GUIActor extends AbstractActor {
         this.nStepsPerSec = nCyclesPerSec;
     }
 
+    private void resumeSimulation(int t, ActorSystem system){
+        this.isPaused = false;
+        notifyNewStep(t, system);
+    }
+
     @Override
     public Receive createReceive() {
         return receiveBuilder()
@@ -99,6 +108,8 @@ public class GUIActor extends AbstractActor {
                 .match(Message.class, message -> "sync-with-time".equals(message.name()), message -> syncWithTime((Integer) message.contents().get(0)))
                 .match(Message.class, message -> "get-average-time-per-cycle".equals(message.name()), message -> getSender().tell(averageTimePerStep, getSelf()))
                 .match(Message.class, message -> "set-current".equals(message.name()), message -> setCurrentWallTime())
+                .match(Message.class, message -> "pause".equals(message.name()), message -> this.isPaused = true)
+                .match(Message.class, message -> "resume".equals(message.name()), message -> resumeSimulation((Integer) message.contents().get(0), (ActorSystem) message.contents().get(1)))
                 .build();
     }
 }
