@@ -27,12 +27,12 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void selectCell(int gridId, int row, int col, String idUser, Color color) {
+    public void selectCell(int gridId, int row, int col, Color color) {
         allGrids.get(gridId).setColor(row, col, color);
     }
 
     @Override
-    public void unselectCell(int gridId, int row, int col, String idUser) {
+    public void unselectCell(int gridId, int row, int col) {
         allGrids.get(gridId).setColor(row, col, Color.WHITE);
     }
 

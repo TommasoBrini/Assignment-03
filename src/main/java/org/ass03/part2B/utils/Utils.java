@@ -1,7 +1,7 @@
 package org.ass03.part2B.utils;
 
 import org.ass03.part2B.model.Cell;
-import org.ass03.part2B.model.GridImpl;
+import org.ass03.part2B.model.Grid;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -110,7 +110,7 @@ public class Utils {
         return sb.toString();
     }
 
-    public static GridImpl fromString(String message) {
+    public static Grid fromString(String message) {
         String[] parts = message.split(" ");
         int[][] grid = new int[9][9];
         int index = 1;
@@ -121,7 +121,7 @@ public class Utils {
             }
         }
 
-        return new GridImpl(Integer.parseInt(parts[0]), grid);
+        return new Grid(Integer.parseInt(parts[0]), grid);
     }
 
     public static boolean submit(Cell[][] grid) {

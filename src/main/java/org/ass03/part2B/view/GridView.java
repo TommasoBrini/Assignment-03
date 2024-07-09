@@ -1,7 +1,6 @@
 package org.ass03.part2B.view;
 
-import org.ass03.part2B.model.GridImpl;
-import org.ass03.part2B.model.remote.Grid;
+import org.ass03.part2B.model.Grid;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +34,7 @@ public class GridView extends JFrame {
         backButton.addActionListener(listener);
     }
 
-    public void displayGrids(List<Grid> grids, ActionListener listener) throws RemoteException {
+    public void displayGrids(List<Grid> grids, ActionListener listener) {
         gridPanel.removeAll();
         for (int i = 0; i < grids.size(); i++) {
             String name = "Grid " + (i + 1);

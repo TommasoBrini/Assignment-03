@@ -1,9 +1,8 @@
 package org.ass03.part2B.view;
 
 import org.ass03.part2B.model.Cell;
-import org.ass03.part2B.model.GridImpl;
 import org.ass03.part2B.model.User;
-import org.ass03.part2B.model.remote.Grid;
+import org.ass03.part2B.model.Grid;
 import org.ass03.part2B.utils.Utils;
 
 import javax.swing.*;
@@ -57,7 +56,7 @@ public class GameDetailsView extends JFrame {
         submitButton.addActionListener(listener);
     }
 
-    public void displayGrid(Grid grid, User user) throws RemoteException {
+    public void displayGrid(Grid grid, User user){
         this.gridId = grid.getId();
         this.myColor = Utils.getColorByName(user.getColor());
         this.gamePanel.removeAll();
@@ -158,7 +157,7 @@ public class GameDetailsView extends JFrame {
         }
     }
 
-    public void updateGrid(Grid grid) throws RemoteException {
+    public void updateGrid(Grid grid) {
         grid.printGrid();
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {

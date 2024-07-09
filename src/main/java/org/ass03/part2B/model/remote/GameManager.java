@@ -13,9 +13,9 @@ public interface GameManager extends Remote {
 
     void updateGrid(int gridId, int row, int col, int value) throws RemoteException;
 
-    void selectCell(int gridId, int row, int col, String idUser, Color color) throws RemoteException;
+    void selectCell(int gridId, int row, int col, Color color) throws RemoteException;
 
-    void unselectCell(int gridId, int row, int col, String idUser) throws RemoteException;
+    void unselectCell(int gridId, int row, int col) throws RemoteException;
 
     void submitGrid(int gridId, String idUser) throws RemoteException;
 

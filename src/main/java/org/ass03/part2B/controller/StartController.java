@@ -27,11 +27,8 @@ public class StartController {
         public void actionPerformed(java.awt.event.ActionEvent e) {
             startView.setVisible(false);
             GridView gridView = new GridView(user.getId());
-            try {
-                new GridController(user, startView, gridView);
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
+            new GridController(user, startView, gridView);
+
             gridView.setVisible(true);
         }
     }
@@ -45,11 +42,7 @@ public class StartController {
                 throw new RuntimeException(ex);
             }
             GameDetailsView gameDetailsView = new GameDetailsView(user.getId());
-            try {
-                new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
+            new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
             startView.setVisible(false);
             gameDetailsView.setVisible(true);
         }

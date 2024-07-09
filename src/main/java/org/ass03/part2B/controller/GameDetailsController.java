@@ -16,7 +16,7 @@ public class GameDetailsController implements GridUpdateListener {
     private final User user;
     private final int selectedGrid;
 
-    public GameDetailsController(User user, GameDetailsView gameDetailsView, StartView startView, int selectedGrid) throws RemoteException {
+    public GameDetailsController(User user, GameDetailsView gameDetailsView, StartView startView, int selectedGrid) {
         this.user = user;
         this.gameDetailsView = gameDetailsView;
         this.startView = startView;
@@ -33,12 +33,12 @@ public class GameDetailsController implements GridUpdateListener {
     }
 
     @Override
-    public void onGridUpdated(int gridIndex) throws RemoteException {
+    public void onGridUpdated(int gridIndex){
         gameDetailsView.updateGrid(user.getGrid(gridIndex - 1));
     }
 
     @Override
-    public void onCellSelected(int gridId, int row, int col, Color color, String userId) {
+    public void onCellSelected(int gridId, int row, int col, Color color) {
         gameDetailsView.colorCell(gridId, row, col, color);
     }
 
@@ -69,20 +69,16 @@ public class GameDetailsController implements GridUpdateListener {
 
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {
-            try {
-                if (Utils.submit(user.getGrid(selectedGrid).getGrid())) {
-                    try {
-                        user.submitGrid(selectedGrid);
-                        gameDetailsView.updateGrid(user.getGrid(selectedGrid));
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    gameDetailsView.displayMessage("Congratulations! You have successfully completed the game.");
-                } else {
-                    gameDetailsView.displayMessage("Sorry, the solution is not correct. Please try again.");
+            if (Utils.submit(user.getGrid(selectedGrid).getGrid())) {
+                try {
+                    user.submitGrid(selectedGrid);
+                    gameDetailsView.updateGrid(user.getGrid(selectedGrid));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
+                gameDetailsView.displayMessage("Congratulations! You have successfully completed the game.");
+            } else {
+                gameDetailsView.displayMessage("Sorry, the solution is not correct. Please try again.");
             }
         }
     }

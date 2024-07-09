@@ -16,7 +16,7 @@ public class GridController implements GridUpdateListener {
     private final StartView startView;
     private GameDetailsView detailsView;
 
-    public GridController(User user, StartView startView, GridView gridView) throws RemoteException {
+    public GridController(User user, StartView startView, GridView gridView) {
         this.user = user;
         this.gridView = gridView;
         this.startView = startView;
@@ -25,12 +25,12 @@ public class GridController implements GridUpdateListener {
         initView();
     }
 
-    private void initView() throws RemoteException {
+    private void initView(){
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
     @Override
-    public void onGridCreated() throws RemoteException {
+    public void onGridCreated() {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
@@ -40,7 +40,7 @@ public class GridController implements GridUpdateListener {
     }
 
     @Override
-    public void onCellSelected(int gridId, int row, int col, Color color, String idUser) {
+    public void onCellSelected(int gridId, int row, int col, Color color) {
 
     }
 
@@ -50,7 +50,7 @@ public class GridController implements GridUpdateListener {
     }
 
     @Override
-    public void onGridCompleted(int gridId, String userId) throws RemoteException {
+    public void onGridCompleted(int gridId, String userId) {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
@@ -60,11 +60,7 @@ public class GridController implements GridUpdateListener {
         public void actionPerformed(ActionEvent e) {
             int gridIndex = Integer.parseInt(e.getActionCommand().split(" ")[1]) - 1;
             detailsView = new GameDetailsView(user.getId());
-            try {
-                new GameDetailsController(user, detailsView, startView, gridIndex);
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
+            new GameDetailsController(user, detailsView, startView, gridIndex);
             detailsView.setVisible(true);
             startView.setVisible(false);
             gridView.setVisible(false);
