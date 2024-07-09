@@ -7,6 +7,7 @@ import org.ass03.part2B.view.StartView;
 
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.concurrent.TimeoutException;
 
 public class StartController {
@@ -26,7 +27,11 @@ public class StartController {
         public void actionPerformed(java.awt.event.ActionEvent e) {
             startView.setVisible(false);
             GridView gridView = new GridView(user.getId());
-            new GridController(user, startView, gridView);
+            try {
+                new GridController(user, startView, gridView);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
             gridView.setVisible(true);
         }
     }
@@ -40,7 +45,11 @@ public class StartController {
                 throw new RuntimeException(ex);
             }
             GameDetailsView gameDetailsView = new GameDetailsView(user.getId());
-            new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
+            try {
+                new GameDetailsController(user, gameDetailsView, startView, user.getAllGrids().size() - 1);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
             startView.setVisible(false);
             gameDetailsView.setVisible(true);
         }

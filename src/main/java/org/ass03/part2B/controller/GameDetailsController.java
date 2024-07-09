@@ -8,6 +8,7 @@ import org.ass03.part2B.view.StartView;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 public class GameDetailsController implements GridUpdateListener {
     private final GameDetailsView gameDetailsView;
@@ -15,7 +16,7 @@ public class GameDetailsController implements GridUpdateListener {
     private final User user;
     private final int selectedGrid;
 
-    public GameDetailsController(User user, GameDetailsView gameDetailsView, StartView startView, int selectedGrid) {
+    public GameDetailsController(User user, GameDetailsView gameDetailsView, StartView startView, int selectedGrid) throws RemoteException {
         this.user = user;
         this.gameDetailsView = gameDetailsView;
         this.startView = startView;
@@ -32,7 +33,7 @@ public class GameDetailsController implements GridUpdateListener {
     }
 
     @Override
-    public void onGridUpdated(int gridIndex) {
+    public void onGridUpdated(int gridIndex) throws RemoteException {
         gameDetailsView.updateGrid(user.getGrid(gridIndex - 1));
     }
 
@@ -68,16 +69,20 @@ public class GameDetailsController implements GridUpdateListener {
 
         @Override
         public void actionPerformed(java.awt.event.ActionEvent e) {
-            if (Utils.submit(user.getGrid(selectedGrid).getGrid())) {
-                try {
-                    user.submitGrid(selectedGrid);
-                    gameDetailsView.updateGrid(user.getGrid(selectedGrid));
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+            try {
+                if (Utils.submit(user.getGrid(selectedGrid).getGrid())) {
+                    try {
+                        user.submitGrid(selectedGrid);
+                        gameDetailsView.updateGrid(user.getGrid(selectedGrid));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    gameDetailsView.displayMessage("Congratulations! You have successfully completed the game.");
+                } else {
+                    gameDetailsView.displayMessage("Sorry, the solution is not correct. Please try again.");
                 }
-                gameDetailsView.displayMessage("Congratulations! You have successfully completed the game.");
-            } else {
-                gameDetailsView.displayMessage("Sorry, the solution is not correct. Please try again.");
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
             }
         }
     }

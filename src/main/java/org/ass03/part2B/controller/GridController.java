@@ -8,6 +8,7 @@ import org.ass03.part2B.view.StartView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class GridController implements GridUpdateListener {
     private final User user;
@@ -15,7 +16,7 @@ public class GridController implements GridUpdateListener {
     private final StartView startView;
     private GameDetailsView detailsView;
 
-    public GridController(User user, StartView startView, GridView gridView) {
+    public GridController(User user, StartView startView, GridView gridView) throws RemoteException {
         this.user = user;
         this.gridView = gridView;
         this.startView = startView;
@@ -24,12 +25,12 @@ public class GridController implements GridUpdateListener {
         initView();
     }
 
-    private void initView() {
+    private void initView() throws RemoteException {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
     @Override
-    public void onGridCreated() {
+    public void onGridCreated() throws RemoteException {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
@@ -49,7 +50,7 @@ public class GridController implements GridUpdateListener {
     }
 
     @Override
-    public void onGridCompleted(int gridId, String userId) {
+    public void onGridCompleted(int gridId, String userId) throws RemoteException {
         gridView.displayGrids(user.getAllGrids(), new GridButtonListener());
     }
 
@@ -59,7 +60,11 @@ public class GridController implements GridUpdateListener {
         public void actionPerformed(ActionEvent e) {
             int gridIndex = Integer.parseInt(e.getActionCommand().split(" ")[1]) - 1;
             detailsView = new GameDetailsView(user.getId());
-            new GameDetailsController(user, detailsView, startView, gridIndex);
+            try {
+                new GameDetailsController(user, detailsView, startView, gridIndex);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
             detailsView.setVisible(true);
             startView.setVisible(false);
             gridView.setVisible(false);

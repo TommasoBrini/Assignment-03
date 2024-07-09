@@ -1,6 +1,6 @@
 package org.ass03.part2B.model;
 
-public class Cell {
+public class Cell implements java.io.Serializable {
 
     private int value;
     private final boolean initialSet;
