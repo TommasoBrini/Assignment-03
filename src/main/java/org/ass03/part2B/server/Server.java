@@ -1,27 +1,27 @@
 package org.ass03.part2B.server;
 
-import org.ass03.part2B.model.GridImpl;
-import org.ass03.part2B.model.remote.Grid;
+import org.ass03.part2B.model.remote.GameManager;
+import org.ass03.part2B.model.remote.GameManagerImpl;
 
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 
 public class Server {
-    public Server() {}
-    public void registryGrid(Grid grid) {
+    public static void main(String[] args) {
         try {
-            Grid gridStub = (Grid) UnicastRemoteObject.exportObject(grid, 0);
-
+            GameManager gameManager = new GameManagerImpl();
+            GameManager gameManagerStub = (GameManager) UnicastRemoteObject.exportObject(gameManager, 0);
             // Bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = null;
 
-            registry.rebind("grid-" + grid.getId(), gridStub);
+            registry = LocateRegistry.getRegistry();
+            registry.rebind("GameManager", gameManagerStub);
 
-            System.out.println("Objects registered.");
-        } catch (Exception e) {
-            System.err.println("Server exception: " + e.toString());
-            e.printStackTrace();
+            System.out.println("Game Manager ready to play!");
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }
