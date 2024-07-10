@@ -34,7 +34,7 @@ public class GameDetailsController implements GridUpdateListener {
 
     @Override
     public void onGridUpdated(int gridIndex){
-        gameDetailsView.updateGrid(user.getGrid(gridIndex - 1));
+        gameDetailsView.updateGrid(user.getGrid(gridIndex));
     }
 
     @Override

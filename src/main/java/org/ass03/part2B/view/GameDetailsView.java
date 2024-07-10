@@ -101,6 +101,7 @@ public class GameDetailsView extends JFrame {
 
                     cellTextField.addActionListener(e -> {
                         try {
+                            System.out.println("Unselecting cell: " + currentRow + ", " + currentCol);
                             updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
@@ -122,6 +123,7 @@ public class GameDetailsView extends JFrame {
                         @Override
                         public void focusLost(FocusEvent e) {
                             try {
+                                System.out.println("Unselecting cell: " + currentRow + ", " + currentCol);
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                                 user.unselectCell(grid.getId(), currentRow, currentCol);
                             } catch (IOException ex) {
@@ -134,6 +136,8 @@ public class GameDetailsView extends JFrame {
                 cellTextFields[row][col] = cellTextField;
             }
         }
+        gamePanel.repaint();
+        gamePanel.revalidate();
     }
 
     private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField, User user) throws IOException {
@@ -155,6 +159,8 @@ public class GameDetailsView extends JFrame {
                 cellTextField.setText(""); // Clear the text field if input is invalid
             }
         }
+        gamePanel.revalidate();
+        gamePanel.repaint();
     }
 
     public void updateGrid(Grid grid) {
@@ -173,6 +179,8 @@ public class GameDetailsView extends JFrame {
                 }
             }
         }
+        gamePanel.repaint();
+        gamePanel.revalidate();
     }
 
     public void colorCell(int gridId, int row, int col, Color color){

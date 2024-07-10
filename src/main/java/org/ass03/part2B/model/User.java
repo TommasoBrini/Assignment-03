@@ -53,7 +53,6 @@ public class User {
 
     public void createGrid() throws IOException, TimeoutException {
         gameManager.createGrid();
-        notifyGridCreated();
     }
 
     public void notifyGridCreated(){
@@ -64,10 +63,9 @@ public class User {
 
     public void updateGrid(int gridId, int row, int col, int value) throws IOException {
         gameManager.updateGrid(gridId, row, col, value);
-        notifyGridUpdated(gridId);
     }
 
-    private void notifyGridUpdated(int gridId) throws RemoteException {
+    public void notifyGridUpdated(int gridId) throws RemoteException {
         for (GridUpdateListener listener : listeners) {
             listener.onGridUpdated(gridId);
         }
@@ -75,10 +73,9 @@ public class User {
 
     public void selectCell(int gridId, int row, int col) throws IOException {
         gameManager.selectCell(gridId, row, col, Utils.getColorByName(color));
-        notifyCellSelected(gridId, row, col, Utils.getColorByName(color));
     }
 
-    private void notifyCellSelected(int gridId, int row, int col, Color color) {
+    public void notifyCellSelected(int gridId, int row, int col, Color color) {
         for (GridUpdateListener listener : listeners) {
             listener.onCellSelected(gridId, row, col, color);
         }
@@ -86,10 +83,9 @@ public class User {
 
     public void unselectCell(int gridId, int row, int col) throws IOException {
         gameManager.unselectCell(gridId, row, col);
-        notifyCellUnselect(gridId, row, col);
     }
 
-    private void notifyCellUnselect(int gridId, int row, int col){
+    public void notifyCellUnselect(int gridId, int row, int col){
         for (GridUpdateListener listener : listeners) {
             listener.onCellUnselected(gridId, row, col);
         }
@@ -97,10 +93,9 @@ public class User {
 
     public void submitGrid(int gridId) throws IOException {
         gameManager.submitGrid(gridId, id);
-        notifyGridCompleted(gridId, id);
     }
 
-    private void notifyGridCompleted(int gridId, String userId) throws RemoteException {
+    public void notifyGridCompleted(int gridId, String userId) throws RemoteException {
         for (GridUpdateListener listener : listeners) {
             listener.onGridCompleted(gridId, userId);
         }
