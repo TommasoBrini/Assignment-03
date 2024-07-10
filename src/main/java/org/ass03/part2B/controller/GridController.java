@@ -1,5 +1,6 @@
 package org.ass03.part2B.controller;
 
+import org.ass03.part2B.model.Grid;
 import org.ass03.part2B.model.User;
 import org.ass03.part2B.view.GameDetailsView;
 import org.ass03.part2B.view.GridView;

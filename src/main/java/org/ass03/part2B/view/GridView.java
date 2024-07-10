@@ -37,7 +37,7 @@ public class GridView extends JFrame {
     public void displayGrids(List<Grid> grids, ActionListener listener) {
         gridPanel.removeAll();
         for (int i = 0; i < grids.size(); i++) {
-            String name = "Grid " + (i + 1);
+            String name = "Grid " + (i);
             if (grids.get(i).isCompleted()) {
                 name += " (Completed)";
             }
@@ -46,6 +46,8 @@ public class GridView extends JFrame {
             gridButton.addActionListener(listener);
             gridPanel.add(gridButton);
         }
+        gridPanel.revalidate();
+        gridPanel.repaint();
     }
 
 }

@@ -2,6 +2,8 @@ package org.ass03.part2B.model;
 
 import org.ass03.part2B.controller.GridUpdateListener;
 import org.ass03.part2B.model.remote.GameManager;
+import org.ass03.part2B.model.remote.UserCallback;
+import org.ass03.part2B.model.remote.UserCallbackImpl;
 import org.ass03.part2B.utils.Utils;
 
 import java.awt.*;
@@ -18,6 +20,7 @@ public class User {
     private final String id;
     private final String color;
     private final GameManager gameManager;
+    private UserCallback userCallback;
     private final List<GridUpdateListener> listeners;
 
     public User(String id, String color) throws RemoteException, NotBoundException {
@@ -27,6 +30,9 @@ public class User {
 
         Registry registry = LocateRegistry.getRegistry();
         gameManager = (GameManager) registry.lookup("GameManager");
+
+        this.userCallback = new UserCallbackImpl(this);
+        gameManager.registerCallback(userCallback);
     }
 
     public String getId() {
@@ -50,7 +56,7 @@ public class User {
         notifyGridCreated();
     }
 
-    private void notifyGridCreated(){
+    public void notifyGridCreated(){
         for (GridUpdateListener listener : listeners) {
             listener.onGridCreated();
         }

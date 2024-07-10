@@ -9,6 +9,8 @@ import java.rmi.Remote;
 
 public interface GameManager extends Remote {
 
+    void registerCallback(UserCallback userCallback) throws RemoteException;
+
     void createGrid() throws RemoteException;
 
     void updateGrid(int gridId, int row, int col, int value) throws RemoteException;

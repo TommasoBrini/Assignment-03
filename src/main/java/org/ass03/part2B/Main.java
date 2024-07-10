@@ -11,16 +11,11 @@ import java.rmi.NotBoundException;
 import java.util.concurrent.TimeoutException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, TimeoutException, NotBoundException {
+    public static void main(String[] args) throws IOException, NotBoundException {
 
-        User user = null;
-        try {
-            user = new User("1", "yellow");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        }
-        StartView view = new StartView(user.getId());
-        new StartController(view, user);
+        User user1 = new User("1", "yellow");
+        StartView view = new StartView(user1.getId());
+        new StartController(view, user1);
         view.setVisible(true);
 
         User user2 = new User("2", "green");

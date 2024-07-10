@@ -3,22 +3,37 @@ package org.ass03.part2B.model.remote;
 import org.ass03.part2B.model.Grid;
 
 import java.awt.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameManagerImpl implements GameManager{
 
     private final List<Grid> allGrids;
+    private final List<UserCallback> callbacks;
 
     public GameManagerImpl() {
         this.allGrids = new ArrayList<>();
+        this.callbacks = new ArrayList<>();
     }
 
     @Override
-    public void createGrid() {
+    public void registerCallback(UserCallback userCallback) {
+        callbacks.add(userCallback);
+    }
+
+    @Override
+    public synchronized void createGrid() {
         int gridId = allGrids.size();
         Grid grid = new Grid(gridId);
         allGrids.add(grid);
+        for (UserCallback callback : callbacks) {
+            try {
+                callback.onGridCreated();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
