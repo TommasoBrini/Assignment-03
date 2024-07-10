@@ -2,7 +2,6 @@ package org.ass03.part2B.model;
 
 import org.ass03.part2B.controller.GridUpdateListener;
 import org.ass03.part2B.model.remote.GameManager;
-import org.ass03.part2B.model.remote.UserCallback;
 import org.ass03.part2B.model.remote.UserCallbackImpl;
 import org.ass03.part2B.utils.Utils;
 
@@ -20,7 +19,6 @@ public class User {
     private final String id;
     private final String color;
     private final GameManager gameManager;
-    private UserCallback userCallback;
     private final List<GridUpdateListener> listeners;
 
     public User(String id, String color) throws RemoteException, NotBoundException {
@@ -31,8 +29,7 @@ public class User {
         Registry registry = LocateRegistry.getRegistry();
         gameManager = (GameManager) registry.lookup("GameManager");
 
-        this.userCallback = new UserCallbackImpl(this);
-        gameManager.registerCallback(userCallback);
+        gameManager.registerCallback(new UserCallbackImpl(this));
     }
 
     public String getId() {
@@ -41,10 +38,6 @@ public class User {
 
     public String getColor() {
         return color;
-    }
-
-    public GameManager getGameManager() {
-        return gameManager;
     }
 
     public void addGridUpdateListener(GridUpdateListener listener){
@@ -65,7 +58,7 @@ public class User {
         gameManager.updateGrid(gridId, row, col, value);
     }
 
-    public void notifyGridUpdated(int gridId) throws RemoteException {
+    public void notifyGridUpdated(int gridId) {
         for (GridUpdateListener listener : listeners) {
             listener.onGridUpdated(gridId);
         }
@@ -95,7 +88,7 @@ public class User {
         gameManager.submitGrid(gridId, id);
     }
 
-    public void notifyGridCompleted(int gridId, String userId) throws RemoteException {
+    public void notifyGridCompleted(int gridId, String userId) {
         for (GridUpdateListener listener : listeners) {
             listener.onGridCompleted(gridId, userId);
         }

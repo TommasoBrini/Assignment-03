@@ -1,7 +1,6 @@
 package org.ass03.part2B.utils;
 
 import org.ass03.part2B.model.Cell;
-import org.ass03.part2B.model.Grid;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -108,20 +107,6 @@ public class Utils {
             }
         }
         return sb.toString();
-    }
-
-    public static Grid fromString(String message) {
-        String[] parts = message.split(" ");
-        int[][] grid = new int[9][9];
-        int index = 1;
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
-                grid[row][col] = Integer.parseInt(parts[index]);
-                index++;
-            }
-        }
-
-        return new Grid(Integer.parseInt(parts[0]), grid);
     }
 
     public static boolean submit(Cell[][] grid) {

@@ -1,16 +1,14 @@
-package org.ass03.part2B;
+package org.ass03.part2B.run;
 
 
 import org.ass03.part2B.controller.StartController;
 import org.ass03.part2B.model.User;
-import org.ass03.part2B.server.Server;
 import org.ass03.part2B.view.StartView;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.util.concurrent.TimeoutException;
 
-public class Main {
+public class Client {
     public static void main(String[] args) throws IOException, NotBoundException {
 
         User user1 = new User("1", "yellow");

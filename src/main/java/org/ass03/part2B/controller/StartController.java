@@ -7,7 +7,6 @@ import org.ass03.part2B.view.StartView;
 
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.concurrent.TimeoutException;
 
 public class StartController {

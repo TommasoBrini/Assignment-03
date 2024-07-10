@@ -8,7 +8,6 @@ import org.ass03.part2B.view.StartView;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 public class GameDetailsController implements GridUpdateListener {
     private final GameDetailsView gameDetailsView;

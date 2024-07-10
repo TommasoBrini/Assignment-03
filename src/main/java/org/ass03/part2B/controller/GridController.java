@@ -1,6 +1,5 @@
 package org.ass03.part2B.controller;
 
-import org.ass03.part2B.model.Grid;
 import org.ass03.part2B.model.User;
 import org.ass03.part2B.view.GameDetailsView;
 import org.ass03.part2B.view.GridView;
@@ -9,7 +8,6 @@ import org.ass03.part2B.view.StartView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 
 public class GridController implements GridUpdateListener {
     private final User user;

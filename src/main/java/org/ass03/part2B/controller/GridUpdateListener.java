@@ -1,7 +1,6 @@
 package org.ass03.part2B.controller;
 
 import java.awt.*;
-import java.rmi.RemoteException;
 
 public interface GridUpdateListener {
     void onGridCreated();

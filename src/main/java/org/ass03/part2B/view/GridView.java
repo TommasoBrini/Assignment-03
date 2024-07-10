@@ -5,7 +5,6 @@ import org.ass03.part2B.model.Grid;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.List;
 
 public class GridView extends JFrame {

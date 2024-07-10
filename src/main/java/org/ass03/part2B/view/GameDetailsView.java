@@ -10,7 +10,6 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 public class GameDetailsView extends JFrame {
     private final JPanel gamePanel;
@@ -101,7 +100,6 @@ public class GameDetailsView extends JFrame {
 
                     cellTextField.addActionListener(e -> {
                         try {
-                            System.out.println("Unselecting cell: " + currentRow + ", " + currentCol);
                             updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
@@ -123,7 +121,6 @@ public class GameDetailsView extends JFrame {
                         @Override
                         public void focusLost(FocusEvent e) {
                             try {
-                                System.out.println("Unselecting cell: " + currentRow + ", " + currentCol);
                                 updateCellValue(grid, currentRow, currentCol, cellTextField, user);
                                 user.unselectCell(grid.getId(), currentRow, currentCol);
                             } catch (IOException ex) {
@@ -164,7 +161,6 @@ public class GameDetailsView extends JFrame {
     }
 
     public void updateGrid(Grid grid) {
-        grid.printGrid();
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {

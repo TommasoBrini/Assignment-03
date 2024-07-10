@@ -1,4 +1,4 @@
-package org.ass03.part2B.server;
+package org.ass03.part2B.run;
 
 import org.ass03.part2B.model.remote.GameManager;
 import org.ass03.part2B.model.remote.GameManagerImpl;
@@ -14,9 +14,7 @@ public class Server {
             GameManager gameManager = new GameManagerImpl();
             GameManager gameManagerStub = (GameManager) UnicastRemoteObject.exportObject(gameManager, 0);
             // Bind the remote object's stub in the registry
-            Registry registry = null;
-
-            registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry();
             registry.rebind("GameManager", gameManagerStub);
 
             System.out.println("Game Manager ready to play!");
