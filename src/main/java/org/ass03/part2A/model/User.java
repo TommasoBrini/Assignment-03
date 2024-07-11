@@ -167,8 +167,6 @@ public class User {
     private DeliverCallback updateGridCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println(" [x] Received update '" + message + "'");
-
             String[] parts = message.split(" ");
             int gridId = Integer.parseInt(parts[0]);
             int row = Integer.parseInt(parts[1]);
@@ -186,7 +184,6 @@ public class User {
     private DeliverCallback addGridCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println(" [x] Received create '" + message + "'");
 
             Grid receivedGrid = Utils.fromString(message);
 
@@ -200,7 +197,6 @@ public class User {
     private DeliverCallback selectCellCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println(" [x] Received select '" + message + "'");
 
             String[] parts = message.split(" ");
             int gridId = Integer.parseInt(parts[0]);
@@ -215,8 +211,6 @@ public class User {
     private DeliverCallback unselectCellCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println(" [x] Received unselect '" + message + "'");
-
             String[] parts = message.split(" ");
             int gridId = Integer.parseInt(parts[0]);
             int row = Integer.parseInt(parts[1]);
@@ -233,7 +227,6 @@ public class User {
     private DeliverCallback submitGridCallBack(){
         return (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println(" [x] Received submit '" + message + "'");
 
             String[] parts = message.split(" ");
             int gridId = Integer.parseInt(parts[0]);
