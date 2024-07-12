@@ -27,7 +27,7 @@ public abstract class AbstractSimulation {
     protected AbstractSimulation(int numCar){
         system = ActorSystem.create("TrafficSimulation");
         system.actorOf(Props.create(EnvironmentActor.class, "RoadEnv"), "env");
-        system.actorOf(Props.create(GUIActor.class), "gui");
+        system.actorOf(Props.create(SimulationActor.class), "sim");
         this.numCars = numCar;
     }
 
@@ -46,7 +46,7 @@ public abstract class AbstractSimulation {
      */
     public void run(int numSteps) {
 
-        system.actorSelection("/user/gui").tell(new Message("set-start", List.of(numSteps)), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("set-start", List.of(numSteps)), ActorRef.noSender());
 
         /* initialize the env and the agents inside */
         int t = t0;
@@ -64,7 +64,7 @@ public abstract class AbstractSimulation {
 
     public long getSimulationDuration() {
         long dur;
-        Future<Object> future = Patterns.ask(system.actorSelection("/user/gui"), new Message("get-duration", List.of()), 1000);
+        Future<Object> future = Patterns.ask(system.actorSelection("/user/sim"), new Message("get-duration", List.of()), 1000);
         try {
             dur = (long) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
         } catch (TimeoutException | InterruptedException e) {
@@ -75,13 +75,13 @@ public abstract class AbstractSimulation {
 
     public long getAverageTimePerCycle() {
         long avg;
-        Future<Object> future = Patterns.ask(system.actorSelection("/user/gui"), new Message("get-average-time-per-cycle", List.of()), 1000);
+        Future<Object> future = Patterns.ask(system.actorSelection("/user/sim"), new Message("get-average-time-per-cycle", List.of()), 1000);
         try {
             avg = (long) Await.result(future, Duration.create(10, TimeUnit.SECONDS));
         } catch (TimeoutException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        system.actorSelection("/user/gui").tell(new Message("get-average-time-per-cycle", List.of()), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("get-average-time-per-cycle", List.of()), ActorRef.noSender());
         return avg;
     }
 
@@ -93,17 +93,17 @@ public abstract class AbstractSimulation {
     }
 
     protected void syncWithTime(int nCyclesPerSec) {
-        system.actorSelection("/user/gui").tell(new Message("sync-with-time", List.of(nCyclesPerSec)), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("sync-with-time", List.of(nCyclesPerSec)), ActorRef.noSender());
     }
 
     /* methods for listeners */
 
     public void addSimulationListener(SimulationListener l) {
-        system.actorSelection("/user/gui").tell(new Message("add-listener", List.of(l)), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("add-listener", List.of(l)), ActorRef.noSender());
     }
 
     private void notifyReset(int t0) {
-        system.actorSelection("/user/gui").tell(new Message("reset", List.of(t0)), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("reset", List.of(t0)), ActorRef.noSender());
     }
 
     public int getNumCars() {
@@ -124,10 +124,10 @@ public abstract class AbstractSimulation {
     }
 
     public void pause() {
-        system.actorSelection("/user/gui").tell(new Message("pause", List.of()), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("pause", List.of()), ActorRef.noSender());
     }
 
     public void resume() {
-        system.actorSelection("/user/gui").tell(new Message("resume", List.of(dt, system)), ActorRef.noSender());
+        system.actorSelection("/user/sim").tell(new Message("resume", List.of(dt, system)), ActorRef.noSender());
     }
 }

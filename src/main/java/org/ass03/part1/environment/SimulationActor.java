@@ -8,7 +8,7 @@ import org.ass03.part1.util.Message;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GUIActor extends AbstractActor {
+public class SimulationActor extends AbstractActor {
 
     private final List<SimulationListener> listeners;
 
@@ -25,7 +25,7 @@ public class GUIActor extends AbstractActor {
     private int nSteps;
     private boolean isPaused;
 
-    public GUIActor(){
+    public SimulationActor(){
         super();
         this.listeners = new ArrayList<>();
         this.toBeInSyncWithWallTime = false;

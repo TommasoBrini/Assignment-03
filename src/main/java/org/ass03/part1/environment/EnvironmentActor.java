@@ -65,9 +65,9 @@ public class EnvironmentActor extends AbstractActor {
      */
     private void step(int dt) {
         this.dt = dt;
-        getContext().actorSelection("/user/gui").tell(new Message("set-current", List.of()), ActorRef.noSender());
+        getContext().actorSelection("/user/sim").tell(new Message("set-current", List.of()), ActorRef.noSender());
         if (this.actualNumStep == this.nStep) {
-            getContext().actorSelection("/user/gui").tell(new Message("set-end", null), ActorRef.noSender());
+            getContext().actorSelection("/user/sim").tell(new Message("set-end", null), ActorRef.noSender());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -145,7 +145,7 @@ public class EnvironmentActor extends AbstractActor {
                 }
             }
         }
-        getContext().actorSelection("/user/gui").tell(new Message("new-step", List.of(dt, getContext().system())), ActorRef.noSender());
+        getContext().actorSelection("/user/sim").tell(new Message("new-step", List.of(dt, getContext().system())), ActorRef.noSender());
     }
 
     private Road createRoad(P2d p0, P2d p1) {
