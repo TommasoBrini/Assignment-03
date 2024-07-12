@@ -133,6 +133,8 @@ public class GameDetailsView extends JFrame {
                 cellTextFields[row][col] = cellTextField;
             }
         }
+        gamePanel.revalidate();
+        gamePanel.repaint();
     }
 
     private void updateCellValue(Grid grid, int row, int col, JTextField cellTextField, User user) throws IOException {
@@ -157,7 +159,6 @@ public class GameDetailsView extends JFrame {
     }
 
     public void updateGrid(Grid grid) {
-        grid.printGrid();
         Cell[][] cells = grid.getGrid();
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {

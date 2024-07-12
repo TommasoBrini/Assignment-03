@@ -46,6 +46,8 @@ public class GridView extends JFrame {
             gridButton.addActionListener(listener);
             gridPanel.add(gridButton);
         }
+        gridPanel.revalidate();
+        gridPanel.repaint();
     }
 
 }
