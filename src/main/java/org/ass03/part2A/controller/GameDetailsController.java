@@ -33,17 +33,23 @@ public class GameDetailsController implements GridUpdateListener{
 
     @Override
     public void onGridUpdated(int gridIndex) {
-        gameDetailsView.updateGrid(user.getGrid(gridIndex - 1));
+        if (gameDetailsView.isVisible() && this.selectedGrid == gridIndex) {
+            gameDetailsView.updateGrid(user.getGrid(gridIndex - 1));
+        }
     }
 
     @Override
     public void onCellSelected(int gridId, int row, int col, Color color, String userId) {
-        gameDetailsView.colorCell(gridId, row, col, color);
+        if (gameDetailsView.isVisible() && this.selectedGrid == gridId) {
+            gameDetailsView.colorCell(gridId, row, col, color);
+        }
     }
 
     @Override
     public void onCellUnselected(int gridId, int row, int col) {
-        gameDetailsView.uncoloredCell(row, col);
+        if (gameDetailsView.isVisible() && this.selectedGrid == gridId) {
+            gameDetailsView.uncoloredCell(row, col);
+        }
     }
 
     @Override

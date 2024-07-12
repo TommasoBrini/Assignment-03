@@ -37,7 +37,7 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void updateGrid(int gridId, int row, int col, int value) {
+    public synchronized void updateGrid(int gridId, int row, int col, int value) {
         allGrids.get(gridId).setCellValue(row, col, value);
         for (UserCallback callback : callbacks) {
             try {
@@ -49,7 +49,7 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void selectCell(int gridId, int row, int col, Color color) {
+    public synchronized void selectCell(int gridId, int row, int col, Color color) {
         allGrids.get(gridId).setColor(row, col, color);
         for (UserCallback callback : callbacks) {
             try {
@@ -61,7 +61,7 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void unselectCell(int gridId, int row, int col) {
+    public synchronized void unselectCell(int gridId, int row, int col) {
         allGrids.get(gridId).setColor(row, col, Color.WHITE);
         for (UserCallback callback : callbacks) {
             try {
@@ -73,7 +73,7 @@ public class GameManagerImpl implements GameManager{
     }
 
     @Override
-    public void submitGrid(int gridId, String idUser) {
+    public synchronized void submitGrid(int gridId, String idUser) {
         allGrids.get(gridId).setCompleted();
         for (UserCallback callback : callbacks) {
             try {
