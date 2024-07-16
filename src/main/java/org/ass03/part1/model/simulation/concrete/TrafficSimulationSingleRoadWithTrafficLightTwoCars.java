@@ -1,12 +1,12 @@
-package org.ass03.part1.concreteSimulation;
+package org.ass03.part1.model.simulation.concrete;
 
 
 import akka.actor.Props;
 import akka.pattern.Patterns;
-import org.ass03.part1.car.CarAgentActor;
-import org.ass03.part1.environment.AbstractSimulation;
-import org.ass03.part1.environment.Road;
-import org.ass03.part1.environment.TrafficLight;
+import org.ass03.part1.model.car.CarAgentActor;
+import org.ass03.part1.model.environment.Road;
+import org.ass03.part1.model.environment.TrafficLight;
+import org.ass03.part1.model.simulation.AbstractSimulation;
 import org.ass03.part1.util.Message;
 import org.ass03.part1.util.P2d;
 import scala.concurrent.Await;

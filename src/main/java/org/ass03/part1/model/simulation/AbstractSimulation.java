@@ -1,9 +1,11 @@
-package org.ass03.part1.environment;
+package org.ass03.part1.model.simulation;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.pattern.Patterns;
+import org.ass03.part1.model.environment.EnvironmentActor;
+import org.ass03.part1.model.environment.SimulationListener;
 import org.ass03.part1.util.Message;
 import scala.concurrent.Await;
 import scala.concurrent.Future;

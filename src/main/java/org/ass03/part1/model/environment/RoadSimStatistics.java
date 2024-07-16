@@ -1,8 +1,7 @@
-package org.ass03.part1.concreteSimulation;
+package org.ass03.part1.model.environment;
 
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
-import org.ass03.part1.environment.SimulationListener;
 import org.ass03.part1.util.Message;
 import scala.concurrent.Await;
 import scala.concurrent.Future;

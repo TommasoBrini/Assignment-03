@@ -1,8 +1,9 @@
-package org.ass03.part1.environment;
+package org.ass03.part1.model.simulation;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import org.ass03.part1.model.environment.SimulationListener;
 import org.ass03.part1.util.Message;
 
 import java.util.ArrayList;

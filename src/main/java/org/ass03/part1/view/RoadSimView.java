@@ -1,12 +1,12 @@
-package org.ass03.part1.concreteSimulation;
+package org.ass03.part1.view;
 
 import akka.actor.ActorSystem;
-import org.ass03.part1.car.CarAgentInfo;
+import org.ass03.part1.model.car.CarAgentInfo;
 import org.ass03.part1.util.Message;
 import org.ass03.part1.util.V2d;
-import org.ass03.part1.environment.Road;
-import org.ass03.part1.environment.SimulationListener;
-import org.ass03.part1.environment.TrafficLight;
+import org.ass03.part1.model.environment.Road;
+import org.ass03.part1.model.environment.SimulationListener;
+import org.ass03.part1.model.environment.TrafficLight;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import akka.pattern.Patterns;
@@ -14,7 +14,6 @@ import scala.concurrent.duration.Duration;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

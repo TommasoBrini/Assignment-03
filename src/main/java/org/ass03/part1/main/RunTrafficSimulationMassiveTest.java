@@ -1,7 +1,7 @@
-package org.ass03.part1.run;
+package org.ass03.part1.main;
 
 
-import org.ass03.part1.concreteSimulation.TrafficSimulationSingleRoadMassiveNumberOfCars;
+import org.ass03.part1.model.simulation.concrete.TrafficSimulationSingleRoadMassiveNumberOfCars;
 
 public class RunTrafficSimulationMassiveTest {
 

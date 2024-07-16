@@ -1,7 +1,8 @@
-package org.ass03.part1.run;
+package org.ass03.part1.main;
 
-import org.ass03.part1.concreteSimulation.*;
 import org.ass03.part1.controller.SimViewController;
+import org.ass03.part1.model.simulation.concrete.TrafficSimulationWithCrossRoads;
+import org.ass03.part1.view.RoadSimView;
 
 /**
  * 

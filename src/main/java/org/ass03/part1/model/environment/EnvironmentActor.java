@@ -1,10 +1,10 @@
-package org.ass03.part1.environment;
+package org.ass03.part1.model.environment;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import org.ass03.part1.util.*;
-import org.ass03.part1.car.CarAgentActor;
-import org.ass03.part1.car.CarAgentInfo;
+import org.ass03.part1.model.car.CarAgentActor;
+import org.ass03.part1.model.car.CarAgentInfo;
 import org.ass03.part1.util.Message;
 
 import java.util.ArrayList;

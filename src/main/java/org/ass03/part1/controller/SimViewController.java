@@ -1,9 +1,9 @@
 package org.ass03.part1.controller;
 
 
-import org.ass03.part1.concreteSimulation.RoadSimStatistics;
-import org.ass03.part1.concreteSimulation.RoadSimView;
-import org.ass03.part1.environment.AbstractSimulation;
+import org.ass03.part1.model.environment.RoadSimStatistics;
+import org.ass03.part1.view.RoadSimView;
+import org.ass03.part1.model.simulation.AbstractSimulation;
 
 import javax.swing.*;
 import java.awt.*;

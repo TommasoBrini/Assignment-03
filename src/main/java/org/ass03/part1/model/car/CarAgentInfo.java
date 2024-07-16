@@ -1,6 +1,6 @@
-package org.ass03.part1.car;
+package org.ass03.part1.model.car;
 
-import org.ass03.part1.environment.Road;
+import org.ass03.part1.model.environment.Road;
 
 public  class CarAgentInfo {
 

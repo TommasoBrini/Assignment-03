@@ -1,11 +1,11 @@
-package org.ass03.part1.car;
+package org.ass03.part1.model.car;
 
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.pattern.Patterns;
 import org.ass03.part1.util.Message;
-import org.ass03.part1.environment.Road;
+import org.ass03.part1.model.environment.Road;
 import org.ass03.part1.util.Action;
 import org.ass03.part1.util.CarPercept;
 import org.ass03.part1.util.TrafficLightInfo;

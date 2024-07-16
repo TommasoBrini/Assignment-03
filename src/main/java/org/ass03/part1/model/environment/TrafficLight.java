@@ -1,4 +1,4 @@
-package org.ass03.part1.environment;
+package org.ass03.part1.model.environment;
 
 import org.ass03.part1.util.P2d;
 

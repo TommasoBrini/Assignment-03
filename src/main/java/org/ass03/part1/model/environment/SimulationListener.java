@@ -1,4 +1,4 @@
-package org.ass03.part1.environment;
+package org.ass03.part1.model.environment;
 
 import akka.actor.ActorSystem;
 
