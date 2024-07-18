@@ -38,7 +38,7 @@ public class GameDetailsView extends JFrame {
         add(gamePanel, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        submitButton = new JButton("Submit Simulation");
+        submitButton = new JButton("Submit solution");
         bottomPanel.add(submitButton);
 
         add(bottomPanel, BorderLayout.SOUTH);
